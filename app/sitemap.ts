@@ -1,13 +1,15 @@
 import type { MetadataRoute } from "next";
-import { SITE_CONFIG } from "@/lib/constants";
+import { SITE_CONFIG, WRITING } from "@/lib/constants";
 
 export default function sitemap(): MetadataRoute.Sitemap {
+  const staticRoutes = ["/", "/work", "/projects", "/writing"];
+
   return [
-    {
-      url: SITE_CONFIG.url,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 1,
-    },
-  ];
+    ...staticRoutes,
+    ...WRITING.map((entry) => entry.url),
+  ].map((path) => ({
+    url: new URL(path, SITE_CONFIG.url).toString(),
+    changeFrequency: "monthly" as const,
+    priority: path === "/" ? 1 : 0.7,
+  }));
 }
