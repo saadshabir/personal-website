@@ -1,17 +1,26 @@
 import type { Metadata, Viewport } from "next";
-import { Inter } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { SITE_CONFIG } from "@/lib/constants";
 import "./globals.css";
 
-const inter = Inter({
-  subsets: ["latin"],
-  display: "swap",
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-inter",
-});
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: SITE_CONFIG.name,
+  jobTitle: SITE_CONFIG.jobTitle,
+  description: SITE_CONFIG.description,
+  url: SITE_CONFIG.url,
+  sameAs: [SITE_CONFIG.github, SITE_CONFIG.linkedin],
+  knowsAbout: [
+    "Network Architecture",
+    "Protocol Analysis",
+    "System Programming",
+    "Cybersecurity",
+    "Cloud Architecture",
+  ],
+};
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_CONFIG.url),
@@ -60,24 +69,6 @@ export const metadata: Metadata = {
   alternates: {
     canonical: SITE_CONFIG.url,
   },
-  other: {
-    "script:ld+json": JSON.stringify({
-      "@context": "https://schema.org",
-      "@type": "Person",
-      name: SITE_CONFIG.name,
-      jobTitle: SITE_CONFIG.jobTitle,
-      description: SITE_CONFIG.description,
-      url: SITE_CONFIG.url,
-      sameAs: [SITE_CONFIG.github, SITE_CONFIG.linkedin],
-      knowsAbout: [
-        "Network Architecture",
-        "Protocol Analysis",
-        "System Programming",
-        "Cybersecurity",
-        "Cloud Architecture",
-      ],
-    }),
-  },
 };
 
 export const viewport: Viewport = {
@@ -94,7 +85,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={inter.variable} suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning>
       <body className="min-h-screen font-sans leading-relaxed antialiased">
         <ThemeProvider
           attribute="class"
@@ -110,6 +101,10 @@ export default function RootLayout({
           <SpeedInsights />
           <Analytics />
         </ThemeProvider>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+        />
       </body>
     </html>
   );
