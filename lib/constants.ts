@@ -110,14 +110,6 @@ export const PROJECTS: readonly Project[] = [
       "A self-hosted, terminal-based RAG chatbot that lets you securely query your personal documents using local LLMs via Ollama and ChromaDB, ensuring 100% privacy with zero cloud dependencies.",
     tags: ["Python", "Local LLM (Ollama)", "RAG", "CLI"],
   },
-  {
-    id: "007",
-    name: "CloudChat",
-    url: "https://github.com/saadshabir/CloudChat",
-    description:
-      "A modern Twitter/X clone built with Next.js 15, React 19, and TypeScript. Features real-time updates, infinite scroll, optimistic UI, and Clerk authentication.",
-    tags: ["Next.js", "React", "TypeScript", "Clerk", "Full-stack"],
-  },
 ] as const;
 
 export const WRITING: readonly WritingEntry[] = [
