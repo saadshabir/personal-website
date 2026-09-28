@@ -154,7 +154,7 @@ export const EXPERIENCE: readonly Experience[] = [
     company: "AriesTECH",
     dates: "January 2024 - April 2025",
     description: [
-      "Maintained 99% uptime for Cisco infrastructure through advanced routing and monitoring, while implementing Python automation to reduce manual configuration time by 30%.",
+      "Configured and supported Cisco network infrastructure, maintained 99.9% uptime, and used Python to cut setup time by 30%.",
     ],
     link: "#",
   },
