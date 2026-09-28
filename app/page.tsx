@@ -22,6 +22,10 @@ const socialLinks = [
 ] as const;
 
 export default function Home(): React.JSX.Element {
+  const latestProject =
+    PROJECTS.find((project) => project.id === "007") ?? PROJECTS[0];
+  const latestWriting = WRITING[0];
+
   return (
     <section className="flex flex-col gap-8 w-full max-w-[68ch]">
       <div className="flex flex-col gap-2 w-full">
@@ -75,7 +79,7 @@ export default function Home(): React.JSX.Element {
           Work
         </Link>
         <Link
-          href="/projects"
+          href="/projects#active-projects"
           className="font-medium text-foreground transition-colors hover:text-muted-foreground"
         >
           Projects
@@ -107,63 +111,56 @@ export default function Home(): React.JSX.Element {
         ))}
       </div>
 
-      {(() => {
-        const latestProject = PROJECTS[0];
-        const latestWriting = WRITING[0];
-        const segments = latestWriting.url.split("/").filter(Boolean);
-        const dir = segments.slice(0, -1);
-
-        return (
-          <div className="flex flex-col gap-2 text-sm">
-            <span className="font-medium text-muted-foreground">Latest:</span>
-            <nav
-              aria-label="Latest project"
-              className="flex flex-wrap items-center gap-x-2 gap-y-1 text-muted-foreground"
-            >
-              <span>project</span>
-              <span aria-hidden="true">/</span>
-              <a
-                href={latestProject.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-1 font-medium text-foreground transition-colors hover:text-muted-foreground"
-              >
-                {latestProject.name}
-                <span aria-hidden="true">↗</span>
-              </a>
-            </nav>
-            <nav
-              aria-label="Latest writing breadcrumb"
-              className="flex flex-wrap items-center gap-x-2 gap-y-1 text-muted-foreground"
-            >
-              <Link href="/" className="transition-colors hover:text-foreground">
-                home
-              </Link>
-              {dir.map((s, i) => {
-                const path = "/" + segments.slice(0, i + 1).join("/");
-                return (
-                  <span key={path} className="flex items-center gap-2">
-                    <span aria-hidden="true">/</span>
-                    <Link href={path} className="transition-colors hover:text-foreground">
-                      {s}
-                    </Link>
-                  </span>
-                );
-              })}
-              <span className="flex items-center gap-2">
-                <span aria-hidden="true">/</span>
-                <Link
-                  href={latestWriting.url}
-                  className="font-medium text-foreground transition-colors hover:text-muted-foreground"
-                >
-                  {latestWriting.title}
-                </Link>
-              </span>
-              <time dateTime={latestWriting.publishedAt}>[{latestWriting.publishedAt}]</time>
-            </nav>
-          </div>
-        );
-      })()}
+      <div className="flex flex-col gap-2 text-sm">
+        <span className="font-medium text-muted-foreground">Latest:</span>
+        <nav
+          aria-label="Latest project"
+          className="flex flex-wrap items-center gap-x-2 gap-y-1 text-muted-foreground"
+        >
+          <Link
+            href="/projects#active-projects"
+            className="transition-colors hover:text-foreground"
+          >
+            projects
+          </Link>
+          <span aria-hidden="true">/</span>
+          <a
+            href={latestProject.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1 font-medium text-foreground transition-colors hover:text-muted-foreground"
+          >
+            {latestProject.name}
+            <span aria-hidden="true">↗</span>
+          </a>
+          <time dateTime="2026-09-28">[2026-09-28]</time>
+        </nav>
+        <nav
+          aria-label="Latest writing breadcrumb"
+          className="flex flex-wrap items-center gap-x-2 gap-y-1 text-muted-foreground"
+        >
+          <Link href="/" className="transition-colors hover:text-foreground">
+            home
+          </Link>
+          <span aria-hidden="true">/</span>
+          <Link
+            href="/writing"
+            className="transition-colors hover:text-foreground"
+          >
+            writing
+          </Link>
+          <span aria-hidden="true">/</span>
+          <Link
+            href={latestWriting.url}
+            className="font-medium text-foreground transition-colors hover:text-muted-foreground"
+          >
+            {latestWriting.title}
+          </Link>
+          <time dateTime={latestWriting.publishedAt}>
+            [{latestWriting.publishedAt}]
+          </time>
+        </nav>
+      </div>
     </section>
   );
 }

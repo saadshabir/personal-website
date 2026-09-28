@@ -19,6 +19,7 @@ type ProjectCategory = "active" | "past" | "earlier-experiments";
 type Project = {
   id: string;
   name: string;
+  displayTitle?: string;
   url: string;
   description: string;
   tags: readonly string[];
@@ -53,17 +54,9 @@ type Experience = {
 // Projects data
 export const PROJECTS: readonly Project[] = [
   {
-    id: "007",
-    name: "RouteProof",
-    category: "active",
-    url: "https://github.com/saadshabir/RouteProof",
-    description:
-      "C++20 routing simulator for OSPF-style shortest paths, ECMP, deterministic link/router failure replay, and reachability checks across every forwarding branch, with FRRouting comparisons and reproducible benchmarks.",
-    tags: ["cpp20", "ospf", "routing"],
-  },
-  {
     id: "001",
     name: "ZTAP",
+    displayTitle: "ZTAP: Controls the network",
     category: "active",
     url: "https://github.com/saadshabir/ZTAP",
     description:
@@ -73,11 +66,22 @@ export const PROJECTS: readonly Project[] = [
   {
     id: "002",
     name: "NetScope",
+    displayTitle: "NetScope: Observes the network",
     category: "active",
     url: "https://github.com/saadshabir/NetScope",
     description:
       "Rust packet and flow analyzer with offline PCAP analysis, live capture, TCP/UDP flow tracking, anomaly heuristics, and a local dashboard.",
     tags: ["rust", "flow-analysis", "packet-capture"],
+  },
+  {
+    id: "007",
+    name: "RouteProof",
+    displayTitle: "RouteProof: Predicts and verifies the network",
+    category: "active",
+    url: "https://github.com/saadshabir/RouteProof",
+    description:
+      "C++20 routing tool in progress; current phases validate scenarios and model an interface-aware topology. SPF/ECMP analysis, failure replay, reachability checks, FRRouting comparisons, and benchmarks are planned.",
+    tags: ["cpp20", "ospf", "routing"],
   },
   {
     id: "003",
@@ -105,6 +109,15 @@ export const PROJECTS: readonly Project[] = [
     description:
       "Python network auditor with ARP device discovery, Nmap port and service scanning, risk checks, anomaly detection, scan history, and JSON/CSV/HTML reports.",
     tags: ["python", "nmap", "anomaly-detection"],
+  },
+  {
+    id: "008",
+    name: "CloudChat",
+    category: "earlier-experiments",
+    url: "https://github.com/saadshabir/CloudChat",
+    description:
+      "Microblogging platform built with Next.js, TypeScript, and PostgreSQL, with Clerk authentication, live feed updates, likes, replies, and reposts.",
+    tags: ["nextjs", "postgresql", "microblogging"],
   },
   {
     id: "006",

@@ -27,7 +27,11 @@ export default function ProjectsPage(): React.JSX.Element {
           );
 
           return (
-            <section key={category.id} className="flex flex-col gap-2">
+            <section
+              key={category.id}
+              id={category.id === "active" ? "active-projects" : undefined}
+              className="flex flex-col gap-2"
+            >
               <div className="flex items-baseline justify-between border-b border-[var(--surface-border)] pb-2">
                 <h2 className="text-xl font-semibold tracking-[-0.03em] text-foreground">
                   {category.title}
@@ -41,7 +45,7 @@ export default function ProjectsPage(): React.JSX.Element {
                 {projects.map((item) => (
                   <ProjectCard
                     key={item.id}
-                    title={item.name}
+                    title={item.displayTitle ?? item.name}
                     tags={item.tags}
                     description={item.description}
                     link={item.url}
