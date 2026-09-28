@@ -14,13 +14,25 @@ export const SITE_CONFIG = {
   status: "Currently exploring new experiences.",
 } as const;
 
+type ProjectCategory = "active" | "past" | "earlier-experiments";
+
 type Project = {
   id: string;
   name: string;
   url: string;
   description: string;
   tags: readonly string[];
+  category: ProjectCategory;
 };
+
+export const PROJECT_CATEGORIES: readonly {
+  id: ProjectCategory;
+  title: string;
+}[] = [
+  { id: "active", title: "Active Projects" },
+  { id: "past", title: "Past Projects" },
+  { id: "earlier-experiments", title: "Earlier Experiments" },
+];
 
 type WritingEntry = {
   id: string;
@@ -41,74 +53,67 @@ type Experience = {
 // Projects data
 export const PROJECTS: readonly Project[] = [
   {
+    id: "007",
+    name: "RouteProof",
+    category: "active",
+    url: "https://github.com/saadshabir/RouteProof",
+    description:
+      "C++20 routing simulator for OSPF-style shortest paths, ECMP, deterministic link/router failure replay, and reachability checks across every forwarding branch, with FRRouting comparisons and reproducible benchmarks.",
+    tags: ["cpp20", "ospf", "routing"],
+  },
+  {
     id: "001",
     name: "ZTAP",
+    category: "active",
     url: "https://github.com/saadshabir/ZTAP",
     description:
-      "Cross-platform zero-trust microsegmentation engine enforcing network policies at the kernel level (eBPF, WFP, pf) with etcd-backed policy distribution and hybrid cloud security orchestration (AWS/GCP/Azure).",
-    tags: [
-      "Go",
-      "eBPF (CO-RE)",
-      "Windows Filtering Platform (WFP)",
-      "etcd",
-      "gRPC",
-      "Prometheus",
-      "AWS/Azure/GCP",
-      "Kubernetes",
-    ],
+      "Linux Kubernetes node agent that enforces NetworkPolicy with per-container eBPF programs and streams flow decisions.",
+    tags: ["ebpf", "kubernetes", "network-policy"],
   },
   {
     id: "002",
     name: "NetScope",
+    category: "active",
     url: "https://github.com/saadshabir/NetScope",
     description:
-      "A high-performance, zero-copy network packet capture and protocol analysis tool written in Rust, featuring kernel-level BPF filtering and real-time flow tracking.",
-    tags: ["Rust", "libpcap", "BPF", "Zero-Copy Parsing", "WebAssembly"],
+      "Rust packet and flow analyzer with offline PCAP analysis, live capture, TCP/UDP flow tracking, anomaly heuristics, and a local dashboard.",
+    tags: ["rust", "flow-analysis", "packet-capture"],
   },
   {
     id: "003",
     name: "pci-segment",
+    category: "past",
     url: "https://github.com/saadshabir/pci-segment",
     description:
-      "Go CLI for PCI-DSS network segmentation. Validates YAML policies, enforces via eBPF (Linux) or pf (macOS), syncs to AWS/Azure, and generates compliance reports.",
-    tags: [
-      "Go",
-      "eBPF",
-      "Cloud Security (AWS/Azure)",
-      "Network Segmentation",
-      "CLI",
-      "Prometheus",
-    ],
+      "Go CLI for PCI-DSS network segmentation with YAML policies, Linux eBPF enforcement, AWS/Azure security group syncing, and HTML/JSON audit reports.",
+    tags: ["pci-dss", "network-segmentation", "ebpf"],
   },
   {
     id: "004",
     name: "cloud-netmapper",
+    category: "past",
     url: "https://github.com/saadshabir/cloud-netmapper",
     description:
-      "A Go-based CLI tool that automatically discovers, visualizes, and analyzes AWS cloud infrastructure. It generates interactive network topology maps across multiple AWS services and performs real-time security checks to detect misconfigurations and infrastructure drift.",
-    tags: [
-      "Go",
-      "AWS SDK",
-      "Network Visualization",
-      "Security Analysis",
-      "CLI",
-    ],
+      "Go CLI that maps AWS networks, generates topology diagrams, flags security risks, and tracks infrastructure drift.",
+    tags: ["aws", "network-topology", "drift-detection"],
   },
   {
     id: "005",
     name: "net-guardian",
+    category: "earlier-experiments",
     url: "https://github.com/saadshabir/net-guardian",
     description:
-      "An automated network health and security auditor that combines ARP/port scanning, machine learning-based anomaly detection, and CVE vulnerability matching to continuously monitor local networks.",
-    tags: ["Python", "Scapy", "Nmap", "Scikit-Learn", "SQLite", "Webhooks"],
+      "Python network auditor with ARP device discovery, Nmap port and service scanning, risk checks, anomaly detection, scan history, and JSON/CSV/HTML reports.",
+    tags: ["python", "nmap", "anomaly-detection"],
   },
   {
     id: "006",
     name: "personal-ai-cli",
+    category: "earlier-experiments",
     url: "https://github.com/saadshabir/personal-ai-cli",
     description:
-      "A self-hosted, terminal-based RAG chatbot that lets you securely query your personal documents using local LLMs via Ollama and ChromaDB, ensuring 100% privacy with zero cloud dependencies.",
-    tags: ["Python", "Local LLM (Ollama)", "RAG", "CLI"],
+      "Self-hosted AI chatbot for the terminal that answers questions about your documents using Ollama, LangChain, and ChromaDB, with source citations.",
+    tags: ["local-llm", "rag", "ollama"],
   },
 ] as const;
 

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import EmailButton from "@/components/EmailButton";
 import { ThemeToggle } from "@/components/ThemeToggle";
-import { SITE_CONFIG, WRITING } from "@/lib/constants";
+import { PROJECTS, SITE_CONFIG, WRITING } from "@/lib/constants";
 
 const socialLinks = [
   {
@@ -108,6 +108,7 @@ export default function Home(): React.JSX.Element {
       </div>
 
       {(() => {
+        const latestProject = PROJECTS[0];
         const latestWriting = WRITING[0];
         const segments = latestWriting.url.split("/").filter(Boolean);
         const dir = segments.slice(0, -1);
@@ -115,6 +116,22 @@ export default function Home(): React.JSX.Element {
         return (
           <div className="flex flex-col gap-2 text-sm">
             <span className="font-medium text-muted-foreground">Latest:</span>
+            <nav
+              aria-label="Latest project"
+              className="flex flex-wrap items-center gap-x-2 gap-y-1 text-muted-foreground"
+            >
+              <span>project</span>
+              <span aria-hidden="true">/</span>
+              <a
+                href={latestProject.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1 font-medium text-foreground transition-colors hover:text-muted-foreground"
+              >
+                {latestProject.name}
+                <span aria-hidden="true">↗</span>
+              </a>
+            </nav>
             <nav
               aria-label="Latest writing breadcrumb"
               className="flex flex-wrap items-center gap-x-2 gap-y-1 text-muted-foreground"

@@ -9,8 +9,6 @@
     --surface-soft: #fafafa;
     --surface-border: #eaeaea;
     --header-surface: rgba(255, 255, 255, 0.8);
-    --status: #0070f3;
-    --status-soft: rgba(0, 112, 243, 0.1);
   }
 
   .dark {
@@ -20,26 +18,6 @@
     --surface-soft: #111111;
     --surface-border: #27272a;
     --header-surface: rgba(0, 0, 0, 0.8);
-    --status: #0070f3;
-    --status-soft: rgba(0, 112, 243, 0.2);
-  }
-
-  :root[data-theme="cool-slate"] {
-    --background: #edf3f4;
-    --foreground: #1d252b;
-    --muted-foreground: #62707a;
-    --surface-soft: rgba(29, 37, 43, 0.055);
-    --surface-border: rgba(29, 37, 43, 0.08);
-    --header-surface: rgba(237, 243, 244, 0.92);
-  }
-
-  :root[data-theme="stone-editorial"] {
-    --background: #ebe7df;
-    --foreground: #1f1d1a;
-    --muted-foreground: #66615a;
-    --surface-soft: rgba(31, 29, 26, 0.06);
-    --surface-border: rgba(31, 29, 26, 0.1);
-    --header-surface: rgba(235, 231, 223, 0.94);
   }
 
   html {

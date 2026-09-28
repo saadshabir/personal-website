@@ -1,13 +1,13 @@
 interface ProjectCardProps {
   title: string;
-  date?: string;
+  tags: readonly string[];
   description: string;
   link: string;
 }
 
 export default function ProjectCard({
   title,
-  date,
+  tags,
   description,
   link,
 }: ProjectCardProps) {
@@ -31,8 +31,10 @@ export default function ProjectCard({
             <h3>{title}</h3>
           </div>
         )}
-        {date ? (
-          <p className="font-medium text-muted-foreground">{date}</p>
+        {tags.length > 0 ? (
+          <p className="font-medium text-muted-foreground">
+            {tags.join(" • ")}
+          </p>
         ) : null}
         <p className="font-medium text-foreground">{description}</p>
       </div>
