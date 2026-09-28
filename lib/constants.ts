@@ -4,7 +4,7 @@ export const SITE_CONFIG = {
   email: "saad.shabir@hotmail.com",
   github: "https://github.com/saadshabir",
   linkedin: "https://www.linkedin.com/in/saadshabir/",
-  resume: "/MuhammadSaad_Shabir_Resume.pdf",
+  resume: "/MuhammadSaad-Shabir_Resume.pdf",
   location: "Ottawa, Canada",
   description:
     "Focusing on network architecture, protocol analysis, and system programming.",

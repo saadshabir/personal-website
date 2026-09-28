@@ -79,7 +79,7 @@ export default function Home(): React.JSX.Element {
           Work
         </Link>
         <Link
-          href="/projects#active-projects"
+          href="/projects"
           className="font-medium text-foreground transition-colors hover:text-muted-foreground"
         >
           Projects
@@ -118,7 +118,7 @@ export default function Home(): React.JSX.Element {
           className="flex flex-wrap items-center gap-x-2 gap-y-1 text-muted-foreground"
         >
           <Link
-            href="/projects#active-projects"
+            href="/projects"
             className="transition-colors hover:text-foreground"
           >
             projects
