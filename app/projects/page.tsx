@@ -2,6 +2,9 @@ import { PROJECTS, PROJECT_CATEGORIES } from "@/lib/constants";
 import ProjectCard from "@/components/ProjectCard";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import Link from "next/link";
+import { getPageMetadata } from "@/lib/seo";
+
+export const metadata = getPageMetadata("projects");
 
 export default function ProjectsPage(): React.JSX.Element {
   return (

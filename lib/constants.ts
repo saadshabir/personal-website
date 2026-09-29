@@ -1,6 +1,6 @@
 export const SITE_CONFIG = {
   name: "Muhammad Saad Shabir",
-  url: "https://msaadshabir.vercel.app",
+  url: "https://saadshabir.vercel.app",
   email: "saad.shabir@hotmail.com",
   github: "https://github.com/saadshabir",
   linkedin: "https://www.linkedin.com/in/saadshabir/",
@@ -38,6 +38,7 @@ export const PROJECT_CATEGORIES: readonly {
 type WritingEntry = {
   id: string;
   title: string;
+  description: string;
   publishedAt: string;
   url: string;
 };
@@ -133,12 +134,16 @@ export const WRITING: readonly WritingEntry[] = [
   {
     id: "002",
     title: "Using a Computer to Prove a + b = b + a",
+    description:
+      "A step-by-step proof that natural-number addition is commutative, using Peano axioms, induction, and the Lean 4 proof assistant.",
     publishedAt: "2026-07-18",
     url: "/writing/add-commutative",
   },
   {
     id: "001",
     title: "Building Zero Trust with eBPF",
+    description:
+      "A practical look at moving from iptables to eBPF for identity-based network policy, safe policy updates, and observable zero-trust enforcement.",
     publishedAt: "2026-03-28",
     url: "/writing/building-zero-trust-with-ebpf",
   },

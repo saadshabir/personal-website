@@ -4,6 +4,7 @@ import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { SITE_CONFIG } from "@/lib/constants";
+import { getPageMetadata } from "@/lib/seo";
 import "./globals.css";
 
 const inter = Inter({
@@ -16,6 +17,7 @@ const inter = Inter({
 const structuredData = {
   "@context": "https://schema.org",
   "@type": "Person",
+  "@id": `${SITE_CONFIG.url}/#person`,
   name: SITE_CONFIG.name,
   jobTitle: SITE_CONFIG.jobTitle,
   description: SITE_CONFIG.description,
@@ -31,9 +33,8 @@ const structuredData = {
 };
 
 export const metadata: Metadata = {
+  ...getPageMetadata("home"),
   metadataBase: new URL(SITE_CONFIG.url),
-  title: SITE_CONFIG.name,
-  description: `${SITE_CONFIG.description} Network engineering and system programming projects.`,
   keywords: [
     "network engineering",
     "system programming",
@@ -60,22 +61,6 @@ export const metadata: Metadata = {
       "max-image-preview": "large",
       "max-snippet": -1,
     },
-  },
-  openGraph: {
-    title: SITE_CONFIG.name,
-    description: `${SITE_CONFIG.description} Network engineering and system programming projects.`,
-    url: SITE_CONFIG.url,
-    siteName: SITE_CONFIG.name,
-    locale: "en_US",
-    type: "website",
-  },
-  twitter: {
-    card: "summary",
-    title: SITE_CONFIG.name,
-    description: `${SITE_CONFIG.description} Network engineering and system programming projects.`,
-  },
-  alternates: {
-    canonical: SITE_CONFIG.url,
   },
 };
 
@@ -111,7 +96,9 @@ export default function RootLayout({
         </ThemeProvider>
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(structuredData).replace(/</g, "\\u003c"),
+          }}
         />
       </body>
     </html>

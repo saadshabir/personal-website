@@ -2,6 +2,9 @@ import { EXPERIENCE } from "@/lib/constants";
 import ExperienceCard from "@/components/ExperienceCard";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import Link from "next/link";
+import { getPageMetadata } from "@/lib/seo";
+
+export const metadata = getPageMetadata("work");
 
 export default function WorkPage(): React.JSX.Element {
   return (

@@ -1,6 +1,9 @@
 import { WRITING } from "@/lib/constants";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import Link from "next/link";
+import { getPageMetadata } from "@/lib/seo";
+
+export const metadata = getPageMetadata("writing");
 
 export default function WritingPage(): React.JSX.Element {
   return (
@@ -27,9 +30,11 @@ export default function WritingPage(): React.JSX.Element {
                 href={item.url} 
                 className="group w-fit flex items-center gap-1 font-bold text-foreground hover:text-muted-foreground transition-colors"
               >
-                <h3 className="text-current">{item.title}</h3>
+                <h2 className="text-xl text-current">{item.title}</h2>
               </Link>
-              <p className="font-medium text-muted-foreground">{item.publishedAt}</p>
+              <time dateTime={item.publishedAt} className="font-medium text-muted-foreground">
+                {item.publishedAt}
+              </time>
             </div>
           ))
         ) : (

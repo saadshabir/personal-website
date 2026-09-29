@@ -2,6 +2,9 @@ import Link from "next/link";
 import EmailButton from "@/components/EmailButton";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { PROJECTS, SITE_CONFIG, WRITING } from "@/lib/constants";
+import { getPageMetadata } from "@/lib/seo";
+
+export const metadata = getPageMetadata("home");
 
 const socialLinks = [
   {

@@ -1,9 +1,14 @@
 import Link from "next/link";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import ArticleStructuredData from "@/components/ArticleStructuredData";
+import { getArticleMetadata } from "@/lib/seo";
+
+export const metadata = getArticleMetadata("building-zero-trust-with-ebpf");
 
 export default function BlogPostPage() {
   return (
     <section className="flex flex-col w-full max-w-[68ch]">
+      <ArticleStructuredData slug="building-zero-trust-with-ebpf" />
       <div className="mb-10 flex flex-row items-center justify-between w-full">
         <div className="flex flex-row items-center gap-2">
           <Link
@@ -28,7 +33,7 @@ export default function BlogPostPage() {
           <h1 className="text-2xl font-bold tracking-[-0.04em] text-foreground mb-1">
             Building Zero Trust with eBPF
           </h1>
-          <time className="font-medium text-muted-foreground">2026-03-28</time>
+          <time dateTime="2026-03-28" className="font-medium text-muted-foreground">2026-03-28</time>
         </header>
 
         <div className="flex flex-col gap-6 mt-6">
