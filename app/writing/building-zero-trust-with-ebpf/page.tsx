@@ -77,7 +77,7 @@ export default function BlogPostPage() {
 
           <p>
             i still remember a friday night where an automated policy sync triggered an{" "}
-            <code className="font-mono text-[0.85em] bg-black/[0.04] dark:bg-white/[0.06] border border-black/[0.08] dark:border-white/[0.12] px-[0.3rem] py-[0.1rem] rounded-md text-foreground">
+            <code className="inline-code">
               iptables-restore
             </code>
             . mid-apply, a pod vanished. the restore failed partway through. nothing was{" "}
@@ -118,11 +118,11 @@ export default function BlogPostPage() {
 
           <p>
             i didn’t want to install{" "}
-            <code className="font-mono text-[0.85em] bg-black/[0.04] dark:bg-white/[0.06] border border-black/[0.08] dark:border-white/[0.12] px-[0.3rem] py-[0.1rem] rounded-md text-foreground">
+            <code className="inline-code">
               clang
             </code>
             ,{" "}
-            <code className="font-mono text-[0.85em] bg-black/[0.04] dark:bg-white/[0.06] border border-black/[0.08] dark:border-white/[0.12] px-[0.3rem] py-[0.1rem] rounded-md text-foreground">
+            <code className="inline-code">
               llvm
             </code>
             , and kernel headers on pristine production nodes just to run a firewall.
@@ -136,11 +136,11 @@ export default function BlogPostPage() {
 
           <p>
             then i found{" "}
-            <code className="font-mono text-[0.85em] bg-black/[0.04] dark:bg-white/[0.06] border border-black/[0.08] dark:border-white/[0.12] px-[0.3rem] py-[0.1rem] rounded-md text-foreground">
+            <code className="inline-code">
               bpf2go
             </code>
             {" "}(from{" "}
-            <code className="font-mono text-[0.85em] bg-black/[0.04] dark:bg-white/[0.06] border border-black/[0.08] dark:border-white/[0.12] px-[0.3rem] py-[0.1rem] rounded-md text-foreground">
+            <code className="inline-code">
               github.com/cilium/ebpf
             </code>
             ), and the whole thing clicked.
@@ -151,7 +151,7 @@ export default function BlogPostPage() {
             embed the resulting eBPF object into the Go binary, and ship a single artifact.
           </p>
 
-          <pre className="font-mono bg-[#0a0a0a] text-[#ededed] p-5 rounded-xl overflow-x-auto text-[0.85em] leading-relaxed dark:bg-[#111111] border border-transparent dark:border-[#333] shadow-sm tracking-tight">
+          <pre className="code-block">
             <code>
               {
                 "//go:generate go run github.com/cilium/ebpf/cmd/bpf2go -no-strip -target bpfel,bpfeb -cc clang bpf ../../bpf/filter.c -- -I../../bpf"
@@ -163,7 +163,7 @@ export default function BlogPostPage() {
 
           <p>at runtime, the node does something like this:</p>
 
-          <pre className="font-mono bg-[#0a0a0a] text-[#ededed] p-5 rounded-xl overflow-x-auto text-[0.85em] leading-relaxed dark:bg-[#111111] border border-transparent dark:border-[#333] shadow-sm tracking-tight">
+          <pre className="code-block">
             <code>
               {`// userspace (simplified): load embedded programs + attach to cgroup
 var objs bpfObjects
@@ -241,17 +241,17 @@ defer ingressLink.Close()`}
 
           <p>
             in the ZTAP codebase, that atomic swap is handled via a{" "}
-            <code className="font-mono text-[0.85em] bg-black/[0.04] dark:bg-white/[0.06] border border-black/[0.08] dark:border-white/[0.12] px-[0.3rem] py-[0.1rem] rounded-md text-foreground">
+            <code className="inline-code">
               bpf_link
             </code>
             {" "}update (through{" "}
-            <code className="font-mono text-[0.85em] bg-black/[0.04] dark:bg-white/[0.06] border border-black/[0.08] dark:border-white/[0.12] px-[0.3rem] py-[0.1rem] rounded-md text-foreground">
+            <code className="inline-code">
               github.com/cilium/ebpf/link
             </code>
             ). the implementation updates both egress and ingress hooks:
           </p>
 
-          <pre className="font-mono bg-[#0a0a0a] text-[#ededed] p-5 rounded-xl overflow-x-auto text-[0.85em] leading-relaxed dark:bg-[#111111] border border-transparent dark:border-[#333] shadow-sm tracking-tight">
+          <pre className="code-block">
             <code>
               {`// simplified from ZTAP's reload path
 func (e *eBPFEnforcer) UpdateFrom(old *eBPFEnforcer) error {
@@ -310,7 +310,7 @@ func (e *eBPFEnforcer) UpdateFrom(old *eBPFEnforcer) error {
 
           <p>here’s a simplified version of ZTAP’s LPM-trie key and lookup shape:</p>
 
-          <pre className="font-mono bg-[#0a0a0a] text-[#ededed] p-5 rounded-xl overflow-x-auto text-[0.85em] leading-relaxed dark:bg-[#111111] border border-transparent dark:border-[#333] shadow-sm tracking-tight">
+          <pre className="code-block">
             <code>
               {`/* kernel-side (simplified): policy_map lookup key (IPv4) */
 #define DIRECTION_EGRESS 0
@@ -378,7 +378,7 @@ struct policy_value *v = bpf_map_lookup_elem(&policy_map, &k);
 
           <p>in code, it’s basically:</p>
 
-          <pre className="font-mono bg-[#0a0a0a] text-[#ededed] p-5 rounded-xl overflow-x-auto text-[0.85em] leading-relaxed dark:bg-[#111111] border border-transparent dark:border-[#333] shadow-sm tracking-tight">
+          <pre className="code-block">
             <code>
               {`// selected-only is driven by a small config map + a set of enforced cgroups
 struct enforcement_config { __u8 selected_only; __u8 _pad[3]; };
@@ -434,12 +434,12 @@ if (selected_only) {
 
           <p>
             the eBPF program writes{" "}
-            <code className="font-mono text-[0.85em] bg-black/[0.04] dark:bg-white/[0.06] border border-black/[0.08] dark:border-white/[0.12] px-[0.3rem] py-[0.1rem] rounded-md text-foreground">
+            <code className="inline-code">
               flow_event
             </code>
             {" "}records into a ring buffer map, and ZTAP can pin that map in bpffs (by
             default at{" "}
-            <code className="font-mono text-[0.85em] bg-black/[0.04] dark:bg-white/[0.06] border border-black/[0.08] dark:border-white/[0.12] px-[0.3rem] py-[0.1rem] rounded-md text-foreground">
+            <code className="inline-code">
               /sys/fs/bpf/ztap/flow_events
             </code>
             ) so user-space tools can stream what’s happening.
@@ -447,7 +447,7 @@ if (selected_only) {
 
           <p>kernel-side, emitting an event looks like:</p>
 
-          <pre className="font-mono bg-[#0a0a0a] text-[#ededed] p-5 rounded-xl overflow-x-auto text-[0.85em] leading-relaxed dark:bg-[#111111] border border-transparent dark:border-[#333] shadow-sm tracking-tight">
+          <pre className="code-block">
             <code>
               {`struct flow_event {
     __u64 timestamp_ns;
@@ -480,7 +480,7 @@ static __always_inline void emit_flow_event(/* fields omitted */)
 
           <p>and user-space can tail the ring buffer with:</p>
 
-          <pre className="font-mono bg-[#0a0a0a] text-[#ededed] p-5 rounded-xl overflow-x-auto text-[0.85em] leading-relaxed dark:bg-[#111111] border border-transparent dark:border-[#333] shadow-sm tracking-tight">
+          <pre className="code-block">
             <code>
               {`// linux: open the pinned ringbuf map and stream events ('ztap flows --follow')
 m, err := ebpf.LoadPinnedMap("/sys/fs/bpf/ztap/flow_events", nil)

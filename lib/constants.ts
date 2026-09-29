@@ -39,7 +39,6 @@ type WritingEntry = {
   id: string;
   title: string;
   publishedAt: string;
-  description: string;
   url: string;
 };
 
@@ -135,14 +134,12 @@ export const WRITING: readonly WritingEntry[] = [
     id: "002",
     title: "Using a Computer to Prove a + b = b + a",
     publishedAt: "2026-07-18",
-    description: "Proving commutativity of addition over the natural numbers using the Lean 4 proof assistant.",
     url: "/writing/add-commutative",
   },
   {
     id: "001",
     title: "Building Zero Trust with eBPF",
     publishedAt: "2026-03-28",
-    description: "My journey moving from iptables to eBPF for dynamic containerized workloads.",
     url: "/writing/building-zero-trust-with-ebpf",
   },
 ];

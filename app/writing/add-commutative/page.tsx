@@ -33,10 +33,6 @@ export default function BlogPostPage() {
 
         <div className="flex flex-col gap-6 mt-6">
           <p>
-            <em></em>
-          </p>
-
-          <p>
             In this post I&apos;ll prove the seemingly trivial fact that addition over the
             natural numbers is commutative. That is, a + b = b + a, for all a, b in N.
           </p>
@@ -47,7 +43,7 @@ export default function BlogPostPage() {
             proof assistant{" "}
             <a
               href="https://lean-lang.org/"
-              className="text-blue-500 underline hover:text-blue-400"
+              className="article-link"
             >
               Lean 4
             </a>
@@ -62,7 +58,7 @@ export default function BlogPostPage() {
             The first step is to formalize the{" "}
             <a
               href="https://en.wikipedia.org/wiki/Peano_axioms"
-              className="text-blue-500 underline hover:text-blue-400"
+              className="article-link"
             >
               Peano axioms
             </a>{" "}
@@ -82,7 +78,7 @@ export default function BlogPostPage() {
             Informally, S(n) = n + 1 for all n in N. In Lean, this looks like:
           </p>
 
-          <pre className="font-mono bg-[#0a0a0a] text-[#ededed] p-5 rounded-xl overflow-x-auto text-[0.85em] leading-relaxed dark:bg-[#111111] border border-transparent dark:border-[#333] shadow-sm tracking-tight">
+          <pre className="code-block">
             <code>
               {`inductive nat where
   | zero : nat
@@ -97,7 +93,7 @@ export default function BlogPostPage() {
             <li>a + S(b) = S(a + b).</li>
           </ul>
 
-          <pre className="font-mono bg-[#0a0a0a] text-[#ededed] p-5 rounded-xl overflow-x-auto text-[0.85em] leading-relaxed dark:bg-[#111111] border border-transparent dark:border-[#333] shadow-sm tracking-tight">
+          <pre className="code-block">
             <code>
               {`def add : nat -> nat -> nat
   | a, zero => a
@@ -115,18 +111,18 @@ instance : Add nat where
 
           <p>
             With this, we have our first two results. First,{" "}
-            <code className="font-mono text-[0.85em] bg-black/[0.04] dark:bg-white/[0.06] border border-black/[0.08] dark:border-white/[0.12] px-[0.3rem] py-[0.1rem] rounded-md text-foreground">
+            <code className="inline-code">
               add_zero
             </code>
             , a proof of n + 0 = n for all n in N. This follows by the first part in the
             definition of addition. We can use the{" "}
-            <code className="font-mono text-[0.85em] bg-black/[0.04] dark:bg-white/[0.06] border border-black/[0.08] dark:border-white/[0.12] px-[0.3rem] py-[0.1rem] rounded-md text-foreground">
+            <code className="inline-code">
               rfl
             </code>{" "}
             tactic, which stands for reflexivity, to directly prove by definition.
           </p>
 
-          <pre className="font-mono bg-[#0a0a0a] text-[#ededed] p-5 rounded-xl overflow-x-auto text-[0.85em] leading-relaxed dark:bg-[#111111] border border-transparent dark:border-[#333] shadow-sm tracking-tight">
+          <pre className="code-block">
             <code>
               {`theorem add_zero (n : nat) : n + zero = n := by
   rfl`}
@@ -135,18 +131,18 @@ instance : Add nat where
 
           <p>
             Next, we have{" "}
-            <code className="font-mono text-[0.85em] bg-black/[0.04] dark:bg-white/[0.06] border border-black/[0.08] dark:border-white/[0.12] px-[0.3rem] py-[0.1rem] rounded-md text-foreground">
+            <code className="inline-code">
               add_succ
             </code>
             , a proof of a + S(b) = S(a + b) for all a, b in N. Similar to above, this
             follows by the second part of our definition of addition. Once again we use the{" "}
-            <code className="font-mono text-[0.85em] bg-black/[0.04] dark:bg-white/[0.06] border border-black/[0.08] dark:border-white/[0.12] px-[0.3rem] py-[0.1rem] rounded-md text-foreground">
+            <code className="inline-code">
               rfl
             </code>{" "}
             tactic.
           </p>
 
-          <pre className="font-mono bg-[#0a0a0a] text-[#ededed] p-5 rounded-xl overflow-x-auto text-[0.85em] leading-relaxed dark:bg-[#111111] border border-transparent dark:border-[#333] shadow-sm tracking-tight">
+          <pre className="code-block">
             <code>
               {`theorem add_succ (a b : nat) : a + succ b = succ (a + b) := by
   rfl`}
@@ -160,20 +156,20 @@ instance : Add nat where
           <p>
             A good step towards commutativity would be to prove commutativity of addition
             with zero first. That is,{" "}
-            <code className="font-mono text-[0.85em] bg-black/[0.04] dark:bg-white/[0.06] border border-black/[0.08] dark:border-white/[0.12] px-[0.3rem] py-[0.1rem] rounded-md text-foreground">
+            <code className="inline-code">
               zero_add
             </code>
             , a proof of 0 + n = n for all n in N. Note that this is not directly given by
             our definitions, so we have to do a bit more work for it. We will use induction
             on n, so let&apos;s tell Lean about this plan. Note that the{" "}
-            <code className="font-mono text-[0.85em] bg-black/[0.04] dark:bg-white/[0.06] border border-black/[0.08] dark:border-white/[0.12] px-[0.3rem] py-[0.1rem] rounded-md text-foreground">
+            <code className="inline-code">
               sorry
             </code>{" "}
             tactic magically proves anything, but does not count as a formal proof.
             It&apos;s simply there to prevent Lean from complaining about syntax errors.
           </p>
 
-          <pre className="font-mono bg-[#0a0a0a] text-[#ededed] p-5 rounded-xl overflow-x-auto text-[0.85em] leading-relaxed dark:bg-[#111111] border border-transparent dark:border-[#333] shadow-sm tracking-tight">
+          <pre className="code-block">
             <code>
               {`theorem zero_add (n : nat) : zero + n = n := by
   induction n with
@@ -185,18 +181,18 @@ instance : Add nat where
           <p>
             We&apos;ve split the proof into two cases: the base case and the induction
             step. The base case is when n = 0, indicated by the{" "}
-            <code className="font-mono text-[0.85em] bg-black/[0.04] dark:bg-white/[0.06] border border-black/[0.08] dark:border-white/[0.12] px-[0.3rem] py-[0.1rem] rounded-md text-foreground">
+            <code className="inline-code">
               | zero
             </code>{" "}
             pattern match. Here our goal is to prove zero + zero = zero. Let&apos;s rewrite
             the left hand side to just 0 using{" "}
-            <code className="font-mono text-[0.85em] bg-black/[0.04] dark:bg-white/[0.06] border border-black/[0.08] dark:border-white/[0.12] px-[0.3rem] py-[0.1rem] rounded-md text-foreground">
+            <code className="inline-code">
               add_zero
             </code>
             :
           </p>
 
-          <pre className="font-mono bg-[#0a0a0a] text-[#ededed] p-5 rounded-xl overflow-x-auto text-[0.85em] leading-relaxed dark:bg-[#111111] border border-transparent dark:border-[#333] shadow-sm tracking-tight">
+          <pre className="code-block">
             <code>
               {`theorem zero_add (n : nat) : zero + n = n := by
   induction n with
@@ -209,34 +205,34 @@ instance : Add nat where
             At this point, we&apos;ve reduced the goal to zero = zero, which Lean is smart
             enough to figure out is true. Let&apos;s move on to the induction step. Here,
             we pattern match{" "}
-            <code className="font-mono text-[0.85em] bg-black/[0.04] dark:bg-white/[0.06] border border-black/[0.08] dark:border-white/[0.12] px-[0.3rem] py-[0.1rem] rounded-md text-foreground">
+            <code className="inline-code">
               | succ n ih
             </code>
             , where{" "}
-            <code className="font-mono text-[0.85em] bg-black/[0.04] dark:bg-white/[0.06] border border-black/[0.08] dark:border-white/[0.12] px-[0.3rem] py-[0.1rem] rounded-md text-foreground">
+            <code className="inline-code">
               ih
             </code>{" "}
             is the induction hypothesis, or a proof of zero + n = n. Our goal is to prove
             zero + succ n = succ n. We can rewrite the left hand side with{" "}
-            <code className="font-mono text-[0.85em] bg-black/[0.04] dark:bg-white/[0.06] border border-black/[0.08] dark:border-white/[0.12] px-[0.3rem] py-[0.1rem] rounded-md text-foreground">
+            <code className="inline-code">
               add_succ
             </code>{" "}
             to get{" "}
-            <code className="font-mono text-[0.85em] bg-black/[0.04] dark:bg-white/[0.06] border border-black/[0.08] dark:border-white/[0.12] px-[0.3rem] py-[0.1rem] rounded-md text-foreground">
+            <code className="inline-code">
               succ (zero + n)
             </code>
             , then rewrite with{" "}
-            <code className="font-mono text-[0.85em] bg-black/[0.04] dark:bg-white/[0.06] border border-black/[0.08] dark:border-white/[0.12] px-[0.3rem] py-[0.1rem] rounded-md text-foreground">
+            <code className="inline-code">
               ih
             </code>{" "}
             to get{" "}
-            <code className="font-mono text-[0.85em] bg-black/[0.04] dark:bg-white/[0.06] border border-black/[0.08] dark:border-white/[0.12] px-[0.3rem] py-[0.1rem] rounded-md text-foreground">
+            <code className="inline-code">
               succ n
             </code>
             , equating the right hand side and thus finishing the proof.
           </p>
 
-          <pre className="font-mono bg-[#0a0a0a] text-[#ededed] p-5 rounded-xl overflow-x-auto text-[0.85em] leading-relaxed dark:bg-[#111111] border border-transparent dark:border-[#333] shadow-sm tracking-tight">
+          <pre className="code-block">
             <code>
               {`theorem zero_add (n : nat) : zero + n = n := by
   induction n with
@@ -247,7 +243,7 @@ instance : Add nat where
 
           <p>
             In a similar way, we prove{" "}
-            <code className="font-mono text-[0.85em] bg-black/[0.04] dark:bg-white/[0.06] border border-black/[0.08] dark:border-white/[0.12] px-[0.3rem] py-[0.1rem] rounded-md text-foreground">
+            <code className="inline-code">
               succ_add
             </code>
             , that S(a) + b = S(a + b) for all a, b in N. For this, we use induction on b.
@@ -256,65 +252,65 @@ instance : Add nat where
           <ul className="list-disc pl-6 space-y-2">
             <li>
               The base case is{" "}
-              <code className="font-mono text-[0.85em] bg-black/[0.04] dark:bg-white/[0.06] border border-black/[0.08] dark:border-white/[0.12] px-[0.3rem] py-[0.1rem] rounded-md text-foreground">
+              <code className="inline-code">
                 succ a + 0 = succ (a + 0)
               </code>
               . First rewrite with{" "}
-              <code className="font-mono text-[0.85em] bg-black/[0.04] dark:bg-white/[0.06] border border-black/[0.08] dark:border-white/[0.12] px-[0.3rem] py-[0.1rem] rounded-md text-foreground">
+              <code className="inline-code">
                 add_zero
               </code>{" "}
               to{" "}
-              <code className="font-mono text-[0.85em] bg-black/[0.04] dark:bg-white/[0.06] border border-black/[0.08] dark:border-white/[0.12] px-[0.3rem] py-[0.1rem] rounded-md text-foreground">
+              <code className="inline-code">
                 succ a = succ (a + 0)
               </code>
               , then rewrite again with{" "}
-              <code className="font-mono text-[0.85em] bg-black/[0.04] dark:bg-white/[0.06] border border-black/[0.08] dark:border-white/[0.12] px-[0.3rem] py-[0.1rem] rounded-md text-foreground">
+              <code className="inline-code">
                 add_zero
               </code>{" "}
               to{" "}
-              <code className="font-mono text-[0.85em] bg-black/[0.04] dark:bg-white/[0.06] border border-black/[0.08] dark:border-white/[0.12] px-[0.3rem] py-[0.1rem] rounded-md text-foreground">
+              <code className="inline-code">
                 succ a = succ a
               </code>
               .
             </li>
             <li>
               For the induction step we have{" "}
-              <code className="font-mono text-[0.85em] bg-black/[0.04] dark:bg-white/[0.06] border border-black/[0.08] dark:border-white/[0.12] px-[0.3rem] py-[0.1rem] rounded-md text-foreground">
+              <code className="inline-code">
                 ih: succ a + b = succ (a + b)
               </code>{" "}
               and we wish to prove{" "}
-              <code className="font-mono text-[0.85em] bg-black/[0.04] dark:bg-white/[0.06] border border-black/[0.08] dark:border-white/[0.12] px-[0.3rem] py-[0.1rem] rounded-md text-foreground">
+              <code className="inline-code">
                 succ a + succ b = succ (a + succ b)
               </code>
               . First rewrite with{" "}
-              <code className="font-mono text-[0.85em] bg-black/[0.04] dark:bg-white/[0.06] border border-black/[0.08] dark:border-white/[0.12] px-[0.3rem] py-[0.1rem] rounded-md text-foreground">
+              <code className="inline-code">
                 add_succ
               </code>{" "}
               to get{" "}
-              <code className="font-mono text-[0.85em] bg-black/[0.04] dark:bg-white/[0.06] border border-black/[0.08] dark:border-white/[0.12] px-[0.3rem] py-[0.1rem] rounded-md text-foreground">
+              <code className="inline-code">
                 succ (succ a + b) = succ (a + succ b)
               </code>
               , then with{" "}
-              <code className="font-mono text-[0.85em] bg-black/[0.04] dark:bg-white/[0.06] border border-black/[0.08] dark:border-white/[0.12] px-[0.3rem] py-[0.1rem] rounded-md text-foreground">
+              <code className="inline-code">
                 ih
               </code>{" "}
               to get{" "}
-              <code className="font-mono text-[0.85em] bg-black/[0.04] dark:bg-white/[0.06] border border-black/[0.08] dark:border-white/[0.12] px-[0.3rem] py-[0.1rem] rounded-md text-foreground">
+              <code className="inline-code">
                 succ (succ (a + b)) = succ (a + succ b)
               </code>
               , and finally with{" "}
-              <code className="font-mono text-[0.85em] bg-black/[0.04] dark:bg-white/[0.06] border border-black/[0.08] dark:border-white/[0.12] px-[0.3rem] py-[0.1rem] rounded-md text-foreground">
+              <code className="inline-code">
                 add_succ
               </code>{" "}
               again to get{" "}
-              <code className="font-mono text-[0.85em] bg-black/[0.04] dark:bg-white/[0.06] border border-black/[0.08] dark:border-white/[0.12] px-[0.3rem] py-[0.1rem] rounded-md text-foreground">
+              <code className="inline-code">
                 succ (succ (a + b)) = succ (succ (a + b))
               </code>
               .
             </li>
           </ul>
 
-          <pre className="font-mono bg-[#0a0a0a] text-[#ededed] p-5 rounded-xl overflow-x-auto text-[0.85em] leading-relaxed dark:bg-[#111111] border border-transparent dark:border-[#333] shadow-sm tracking-tight">
+          <pre className="code-block">
             <code>
               {`theorem succ_add (a b : nat) : succ a + b = succ (a + b) := by
   induction b with
@@ -332,7 +328,7 @@ instance : Add nat where
             b in N. This will be done by induction on b.
           </p>
 
-          <pre className="font-mono bg-[#0a0a0a] text-[#ededed] p-5 rounded-xl overflow-x-auto text-[0.85em] leading-relaxed dark:bg-[#111111] border border-transparent dark:border-[#333] shadow-sm tracking-tight">
+          <pre className="code-block">
             <code>
               {`theorem add_comm (a b : nat) : a + b = b + a := by
   induction b with

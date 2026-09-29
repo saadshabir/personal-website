@@ -1,30 +1,32 @@
 @import "tailwindcss";
 @config "../tailwind.config.ts";
+@custom-variant dark (&:where(.dark, .dark *));
 
 @layer base {
   :root {
-    --background: #ffffff;
-    --foreground: #111111;
-    --muted-foreground: #737373;
-    --surface-soft: #fafafa;
-    --surface-border: #eaeaea;
-    --header-surface: rgba(255, 255, 255, 0.8);
+    --background: #fafafa;
+    --foreground: #27272a;
+    --muted-foreground: #68686d;
+    --surface-border: #e4e4e7;
+    --code-background: #f1f1f3;
+    --link-foreground: #0068c4;
+    color-scheme: light;
   }
 
   .dark {
-    --background: #000000;
-    --foreground: #ededed;
+    --background: #18181b;
+    --foreground: #d4d4d8;
     --muted-foreground: #a1a1aa;
-    --surface-soft: #111111;
-    --surface-border: #27272a;
-    --header-surface: rgba(0, 0, 0, 0.8);
+    --surface-border: #333338;
+    --code-background: #202024;
+    --link-foreground: #8ab4f8;
+    color-scheme: dark;
   }
 
   html {
     scroll-behavior: smooth;
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
-    color-scheme: light dark;
   }
 
   body {
@@ -62,5 +64,27 @@
 
   p {
     max-width: 68ch;
+  }
+}
+
+@layer components {
+  .code-block {
+    @apply overflow-x-auto rounded-xl p-5 font-mono text-[0.85em] leading-relaxed tracking-tight;
+    border: 1px solid var(--surface-border);
+    background-color: var(--code-background);
+    color: var(--foreground);
+  }
+
+  .inline-code {
+    @apply rounded-md font-mono text-[0.85em];
+    padding: 0.1rem 0.3rem;
+    border: 1px solid var(--surface-border);
+    background-color: var(--code-background);
+    color: var(--foreground);
+  }
+
+  .article-link {
+    @apply underline underline-offset-2 transition-colors hover:text-foreground;
+    color: var(--link-foreground);
   }
 }
