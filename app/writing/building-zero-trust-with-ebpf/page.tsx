@@ -208,7 +208,7 @@ defer ingressLink.Close()`}
           </p>
 
           <h2 className="text-xl font-semibold text-foreground mt-4 mb-2">
-            the epiphany of atomic updates
+            atomic updates, one hook at a time
           </h2>
 
           <p>what really sold me on eBPF wasn’t just the packaging.</p>
@@ -228,24 +228,24 @@ defer ingressLink.Close()`}
           <p>the key difference is how updates work.</p>
 
           <p>
-            with iptables, “apply a new policy” often becomes “rewrite the world,” and if
-            anything fails mid-flight you can end up in an in-between state. it’s not that
-            iptables is bad; it’s that its common update mechanisms don’t give you a clean
-            transactional boundary.
+            safe updates depend on knowing the transactional boundary. an
+            iptables-restore commit applies changes to one table; coordinating changes
+            across tables or with external state still needs recovery handling.
+            eBPF has a boundary too: replacing one attached program.
           </p>
 
           <p>
-            with eBPF, ZTAP can do something much closer to a transactional rollout:
+            with eBPF, the rollout can prepare the next policy before changing enforcement:
           </p>
 
           <ol className="list-decimal pl-6 space-y-2">
             <li>load a <strong>new</strong> eBPF program and its maps</li>
             <li>populate the policy maps with the <strong>next</strong> policy state</li>
-            <li>atomically swap the cgroup attachment to point at the new program</li>
+            <li>replace each cgroup attachment with its new program</li>
           </ol>
 
           <p>
-            in the ZTAP codebase, that atomic swap is handled via a{" "}
+            in this example, each attachment is updated via a{" "}
             <code className="inline-code">
               bpf_link
             </code>
@@ -253,7 +253,8 @@ defer ingressLink.Close()`}
             <code className="inline-code">
               github.com/cilium/ebpf/link
             </code>
-            ). the implementation updates both egress and ingress hooks:
+            ). each link update is atomic, but the egress and ingress updates happen
+            separately. the pair is not a single transaction:
           </p>
 
           <pre className="code-block">
@@ -270,6 +271,7 @@ func (e *eBPFEnforcer) UpdateFrom(old *eBPFEnforcer) error {
 
     if old.ingressLink != nil {
         if err := old.ingressLink.Update(e.objs.FilterIngress); err != nil {
+            // Egress may already use the new policy. The caller must recover.
             return err
         }
         e.ingressLink = old.ingressLink
@@ -282,15 +284,19 @@ func (e *eBPFEnforcer) UpdateFrom(old *eBPFEnforcer) error {
           </pre>
 
           <p>
-            the important part isn’t the exact method name; it’s the shape of the idea:
+            this example leaves recovery to the caller. if egress succeeds and ingress
+            fails, egress uses the new policy while ingress still uses the old one.
+            the caller also needs to retain both enforcers until it resolves ownership
+            of the links.
           </p>
 
           <ul className="list-disc pl-6 space-y-2">
-            <li>the old program keeps enforcing while the next one is prepared</li>
-            <li>the swap is a single, explicit step</li>
+            <li>the old programs keep enforcing while the next policy is prepared</li>
+            <li>each hook changes atomically, with a mixed-policy interval between updates</li>
             <li>
-              if the swap fails, you can fall back to a full re-attach instead of running
-              in a half-updated state
+              a failed second update needs an explicit recovery path: roll the first
+              hook back or complete the remaining update, and handle recovery failures
+              with a defined fail-closed policy
             </li>
           </ul>
 
@@ -555,9 +561,9 @@ for event := range monitor.Subscribe(ctx) {
           </p>
 
           <p>
-            these fallbacks aren’t as elegant as “maps + atomic program swap,” but they
-            keep the policy model portable and make it possible to iterate without requiring
-            perfect conditions everywhere.
+            these fallbacks keep the policy model portable and make it possible to
+            iterate across different environments. each backend still needs its own
+            update and recovery guarantees.
           </p>
 
           <h2 className="text-xl font-semibold text-foreground mt-4 mb-2">
@@ -570,9 +576,10 @@ for event := range monitor.Subscribe(ctx) {
           </p>
 
           <p>
-            the real win wasn’t “kernel code is fast.” it was “the enforcement state has a
-            clean transition,” and the system has fewer ways to land in a weird half-applied
-            middle.
+            preparing policy state before replacing a program makes updates easier to
+            reason about. a safe rollout still has to account for separate hooks,
+            partial failures, and recovery; per-link atomicity alone does not make the
+            whole policy change transactional.
           </p>
 
           <p>

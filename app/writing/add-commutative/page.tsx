@@ -91,7 +91,9 @@ export default function BlogPostPage() {
             </code>
           </pre>
 
-          <p>Using this definition of the natural numbers, we can define addition as:</p>
+          <p>
+            Using this definition of the natural numbers, we can define addition as:
+          </p>
 
           <ul className="list-disc pl-6 space-y-2">
             <li>a + 0 = a,</li>
@@ -100,15 +102,28 @@ export default function BlogPostPage() {
 
           <pre className="code-block">
             <code>
-              {`def add : nat -> nat -> nat
+              {`namespace nat
+
+def add : nat -> nat -> nat
   | a, zero => a
   | a, succ b => succ (add a b)
 
 -- use + symbol
 instance : Add nat where
-  add := nat.add`}
+  add := nat.add
+
+end nat
+
+open nat`}
             </code>
           </pre>
+
+          <p>
+            The namespace makes this function <code className="inline-code">nat.add</code>.
+            After closing it, <code className="inline-code">open nat</code> brings
+            the constructors <code className="inline-code">zero</code> and{" "}
+            <code className="inline-code">succ</code> into scope for the proofs below.
+          </p>
 
           <h2 className="text-xl font-semibold text-foreground mt-4 mb-2">
             first two results
