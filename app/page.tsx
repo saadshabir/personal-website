@@ -120,13 +120,6 @@ export default function Home(): React.JSX.Element {
           aria-label="Latest project"
           className="flex flex-wrap items-center gap-x-2 gap-y-1 text-muted-foreground"
         >
-          <Link
-            href="/projects"
-            className="transition-colors hover:text-foreground"
-          >
-            projects
-          </Link>
-          <span aria-hidden="true">/</span>
           <a
             href={latestProject.url}
             target="_blank"
@@ -139,20 +132,9 @@ export default function Home(): React.JSX.Element {
           <time dateTime="2026-09-28">[2026-09-28]</time>
         </nav>
         <nav
-          aria-label="Latest writing breadcrumb"
+          aria-label="Latest writing"
           className="flex flex-wrap items-center gap-x-2 gap-y-1 text-muted-foreground"
         >
-          <Link href="/" className="transition-colors hover:text-foreground">
-            home
-          </Link>
-          <span aria-hidden="true">/</span>
-          <Link
-            href="/writing"
-            className="transition-colors hover:text-foreground"
-          >
-            writing
-          </Link>
-          <span aria-hidden="true">/</span>
           <Link
             href={latestWriting.url}
             className="font-medium text-foreground transition-colors hover:text-muted-foreground"

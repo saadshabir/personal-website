@@ -41,6 +41,7 @@ type WritingEntry = {
   description: string;
   publishedAt: string;
   url: string;
+  projectId?: string;
 };
 
 type Experience = {
@@ -132,6 +133,15 @@ export const PROJECTS: readonly Project[] = [
 
 export const WRITING: readonly WritingEntry[] = [
   {
+    id: "003",
+    title: "ZTAP, with a Smaller Surface",
+    description:
+      "How ZTAP became a focused Kubernetes NetworkPolicy agent: native selectors, per-container eBPF, policy snapshots, and the limits measured along the way.",
+    publishedAt: "2026-10-03",
+    url: "/writing/ztap-with-a-smaller-surface",
+    projectId: "001",
+  },
+  {
     id: "002",
     title: "Using a Computer to Prove a + b = b + a",
     description:
@@ -146,6 +156,7 @@ export const WRITING: readonly WritingEntry[] = [
       "A practical look at moving from iptables to eBPF for identity-based network policy, safe policy updates, and observable zero-trust enforcement.",
     publishedAt: "2026-03-28",
     url: "/writing/building-zero-trust-with-ebpf",
+    projectId: "001",
   },
 ];
 

@@ -87,4 +87,9 @@
     @apply underline underline-offset-2 transition-colors hover:text-foreground;
     color: var(--link-foreground);
   }
+
+  .related-link {
+    @apply font-medium text-foreground transition-colors hover:text-muted-foreground;
+    @apply decoration-[var(--surface-border)] underline underline-offset-4 hover:decoration-current;
+  }
 }

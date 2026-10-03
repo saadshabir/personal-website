@@ -1,4 +1,4 @@
-import { PROJECTS, PROJECT_CATEGORIES } from "@/lib/constants";
+import { PROJECTS, PROJECT_CATEGORIES, WRITING } from "@/lib/constants";
 import ProjectCard from "@/components/ProjectCard";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import Link from "next/link";
@@ -48,10 +48,12 @@ export default function ProjectsPage(): React.JSX.Element {
                 {projects.map((item) => (
                   <ProjectCard
                     key={item.id}
+                    anchor={item.name.toLowerCase()}
                     title={item.displayTitle ?? item.name}
                     tags={item.tags}
                     description={item.description}
                     link={item.url}
+                    writing={WRITING.filter((entry) => entry.projectId === item.id)}
                   />
                 ))}
               </div>

@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import ArticleStructuredData from "@/components/ArticleStructuredData";
-import { getArticleMetadata } from "@/lib/seo";
+import { getArticle, getArticleMetadata } from "@/lib/seo";
+import RelatedProject from "@/components/RelatedProject";
 
 export const metadata = getArticleMetadata("building-zero-trust-with-ebpf");
 
@@ -34,9 +35,24 @@ export default function BlogPostPage() {
             Building Zero Trust with eBPF
           </h1>
           <time dateTime="2026-03-28" className="font-medium text-muted-foreground">2026-03-28</time>
+          <div className="mt-3">
+            <RelatedProject
+              projectId={getArticle("building-zero-trust-with-ebpf").projectId}
+              showSource
+            />
+          </div>
         </header>
 
         <div className="flex flex-col gap-6 mt-6">
+          <aside className="border-l-2 border-[var(--surface-border)] pl-4 text-base text-muted-foreground">
+            this post describes an earlier version of ZTAP. the commands, policy
+            model, and backends have since changed. i wrote about the current agent
+            in{" "}
+            <Link href="/writing/ztap-with-a-smaller-surface" className="article-link">
+              ZTAP, with a smaller surface
+            </Link>
+            .
+          </aside>
           <h2 className="text-xl font-semibold text-foreground mt-4 mb-2">
             the iptables honeymoon (and the crash)
           </h2>
