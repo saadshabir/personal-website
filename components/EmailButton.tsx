@@ -1,11 +1,14 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { SITE_CONFIG } from "@/lib/constants";
 
 const COPY_RESET_DELAY_MS = 2000;
 
-export default function EmailButton(): React.JSX.Element {
+export default function EmailButton({
+  email,
+}: {
+  email: string;
+}): React.JSX.Element {
   const [isCopied, setIsCopied] = useState(false);
   const [copyFailed, setCopyFailed] = useState(false);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -18,7 +21,7 @@ export default function EmailButton(): React.JSX.Element {
 
   const handleEmailClick = async () => {
     try {
-      await navigator.clipboard.writeText(SITE_CONFIG.email);
+      await navigator.clipboard.writeText(email);
       setIsCopied(true);
       setCopyFailed(false);
 
@@ -62,17 +65,17 @@ export default function EmailButton(): React.JSX.Element {
         <span role="status" className="basis-full text-sm text-muted-foreground">
           Couldn&apos;t copy. Email{" "}
           <a
-            href={`mailto:${SITE_CONFIG.email}`}
+            href={`mailto:${email}`}
             className="break-all font-medium text-foreground underline underline-offset-2"
           >
-            {SITE_CONFIG.email}
+            {email}
           </a>
           .
         </span>
       )}
       <noscript>
-        <a href={`mailto:${SITE_CONFIG.email}`} className="break-all font-medium">
-          {SITE_CONFIG.email}
+        <a href={`mailto:${email}`} className="break-all font-medium">
+          {email}
         </a>
       </noscript>
     </>

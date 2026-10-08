@@ -96,7 +96,7 @@ export default function Home(): React.JSX.Element {
       </div>
 
       <div className="flex flex-wrap gap-x-5 gap-y-2">
-        <EmailButton />
+        <EmailButton email={SITE_CONFIG.email} />
         {socialLinks.map((link) => (
           <a
             key={link.label}
