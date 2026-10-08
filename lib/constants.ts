@@ -61,7 +61,7 @@ export const PROJECTS: readonly Project[] = [
     category: "active",
     url: "https://github.com/saadshabir/ZTAP",
     description:
-      "Linux Kubernetes node agent that enforces NetworkPolicy with per-container eBPF programs and streams flow decisions.",
+      "Experimental Linux node agent for Kubernetes NetworkPolicy enforcement using per-container eBPF, with offline policy validation and live flow telemetry.",
     tags: ["ebpf", "kubernetes", "network-policy"],
   },
   {
@@ -71,8 +71,8 @@ export const PROJECTS: readonly Project[] = [
     category: "active",
     url: "https://github.com/saadshabir/NetScope",
     description:
-      "Rust packet and flow analyzer with offline PCAP analysis, live capture, TCP/UDP flow tracking, anomaly heuristics, and a local dashboard.",
-    tags: ["rust", "flow-analysis", "packet-capture"],
+      "Rust CLI for offline PCAP analysis and live packet capture, with TCP/UDP flow tracking, SYN-flood and port-scan heuristics, a local dashboard, and Prometheus metrics.",
+    tags: ["rust", "packet-analysis", "flow-analysis"],
   },
   {
     id: "007",
@@ -81,8 +81,8 @@ export const PROJECTS: readonly Project[] = [
     category: "active",
     url: "https://github.com/saadshabir/RouteProof",
     description:
-      "C++20 routing tool in progress; current phases validate scenarios and model an interface-aware topology. SPF/ECMP analysis, failure replay, reachability checks, FRRouting comparisons, and benchmarks are planned.",
-    tags: ["cpp20", "ospf", "routing"],
+      "C++20 routing simulator for OSPF-style networks with ECMP, deterministic link/router failure replay, and reachability analysis. Validated against FRRouting with reproducible benchmarks.",
+    tags: ["cpp20", "ospf", "network-verification"],
   },
   {
     id: "003",
