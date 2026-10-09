@@ -51,7 +51,7 @@ export default function Home(): React.JSX.Element {
 
       <div className="space-y-4">
         <p className="text-lg leading-relaxed">
-          I&apos;m studying Network Technology at{" "}
+          I study Network Technology at{" "}
           <a
             href={SITE_CONFIG.schoolUrl}
             target="_blank"
@@ -63,13 +63,11 @@ export default function Home(): React.JSX.Element {
               ↗
             </span>
           </a>
-          , where I&apos;m building a foundation in systems, infrastructure, and
-          practical software engineering.
+          , with a focus on network architecture, infrastructure, protocol
+          analysis, and systems programming.
         </p>
         <p className="text-lg leading-relaxed">
-          My current focus is network architecture, protocol analysis, and
-          low-level software, with an interest in building tools that are
-          reliable, observable, and fast.
+          I like building reliable, observable, high-performance tools.
         </p>
         <p className="text-lg leading-relaxed">{SITE_CONFIG.status}</p>
       </div>
