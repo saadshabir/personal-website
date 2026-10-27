@@ -11,10 +11,10 @@ type SeoPage = {
 export const SEO_PAGES = {
   home: {
     path: "/",
-    title: "Networks & Systems",
+    title: "Systems & Infrastructure",
     description:
-      "Network Technology student at Carleton University in Ottawa, building tools for network security, eBPF, packet analysis, and systems programming.",
-    label: "NETWORKS & SYSTEMS",
+      "Network Technology student building tools for network security, routing, and packet analysis, with an interest in the infrastructure behind financial systems.",
+    label: "SYSTEMS & INFRASTRUCTURE",
   },
   work: {
     path: "/work",
@@ -36,6 +36,13 @@ export const SEO_PAGES = {
     description:
       "Technical notes by Muhammad Saad Shabir on network security, eBPF, systems programming, and formal proofs with Lean 4.",
     label: "WRITING",
+  },
+  about: {
+    path: "/about",
+    title: "About",
+    description:
+      "About Muhammad Saad Shabir, a Network Technology student at Carleton University building tools for network security, routing, and packet analysis.",
+    label: "ABOUT",
   },
 } as const satisfies Record<string, SeoPage>;
 

@@ -1,16 +1,28 @@
 import type { Metadata, Viewport } from "next";
-import { Inter } from "next/font/google";
+import { Geist } from "next/font/google";
+import localFont from "next/font/local";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import SiteHeader from "@/components/SiteHeader";
+import SiteFooter from "@/components/SiteFooter";
 import { SITE_CONFIG } from "@/lib/constants";
 import { getPageMetadata } from "@/lib/seo";
 import "./globals.css";
 
-const inter = Inter({
+const geist = Geist({
   subsets: ["latin"],
   display: "swap",
-  variable: "--font-inter",
+  variable: "--font-geist",
+});
+
+// This subset contains the header name only; see fonts/README.md before changing it.
+const urdu = localFont({
+  src: "./fonts/noto-nastaliq-urdu-name.woff2",
+  weight: "400",
+  display: "swap",
+  variable: "--font-urdu",
+  adjustFontFallback: "Times New Roman",
 });
 
 const structuredData = {
@@ -68,7 +80,10 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 5,
   userScalable: true,
-  themeColor: [{ media: "(prefers-color-scheme: light)", color: "#fafafa" }],
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)", color: "#0e0e0e" },
+  ],
 };
 
 export default function RootLayout({
@@ -77,19 +92,20 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={inter.variable} data-scroll-behavior="smooth" suppressHydrationWarning>
-      <body className="min-h-screen font-sans leading-relaxed antialiased">
+    <html lang="en" className={`${geist.variable} ${urdu.variable}`} data-scroll-behavior="smooth" suppressHydrationWarning>
+      <body className="min-h-screen font-sans antialiased">
         <ThemeProvider
           attribute="class"
           defaultTheme="light"
           enableSystem={false}
           disableTransitionOnChange
         >
-          <main className="flex w-full min-h-screen flex-col items-center px-8">
-            <div className="flex w-full flex-col items-start gap-8 px-4 pt-32 pb-48 text-base md:w-3/4 lg:w-1/2">
-              {children}
-            </div>
-          </main>
+          <a className="skip-link" href="#main-content">Skip to content</a>
+          <div className="site-shell">
+            <SiteHeader />
+            <main id="main-content" className="site-main" tabIndex={-1}>{children}</main>
+            <SiteFooter />
+          </div>
           <SpeedInsights />
           <Analytics />
         </ThemeProvider>

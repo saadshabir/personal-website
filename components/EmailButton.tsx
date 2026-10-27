@@ -43,20 +43,9 @@ export default function EmailButton({
         type="button"
         onClick={handleEmailClick}
         aria-label="Copy email address"
-        className="group font-medium text-foreground hover:text-muted-foreground transition-colors text-left"
+        className="text-link cursor-pointer text-left"
       >
-        {isCopied ? (
-          "Copied"
-        ) : (
-          <span className="grid" style={{ justifyItems: "start" }}>
-            <span className="col-start-1 row-start-1 opacity-100 group-hover:opacity-0 transition-opacity duration-0">
-              Email
-            </span>
-            <span className="col-start-1 row-start-1 opacity-0 group-hover:opacity-100 transition-opacity duration-0 pointer-events-none">
-              Copy
-            </span>
-          </span>
-        )}
+        {isCopied ? "Copied" : "Email"}
       </button>
       <span role="status" className="sr-only">
         {isCopied ? "Email address copied." : ""}
@@ -66,7 +55,7 @@ export default function EmailButton({
           Couldn&apos;t copy. Email{" "}
           <a
             href={`mailto:${email}`}
-            className="break-all font-medium text-foreground underline underline-offset-2"
+            className="text-link break-all"
           >
             {email}
           </a>
@@ -74,7 +63,7 @@ export default function EmailButton({
         </span>
       )}
       <noscript>
-        <a href={`mailto:${email}`} className="break-all font-medium">
+        <a href={`mailto:${email}`} className="text-link break-all">
           {email}
         </a>
       </noscript>
