@@ -11,10 +11,9 @@ type SeoPage = {
 export const SEO_PAGES = {
   home: {
     path: "/",
-    title: "Systems & Infrastructure",
-    description:
-      "Network Technology student building tools for network security, routing, and packet analysis, with an interest in the infrastructure behind financial systems.",
-    label: "SYSTEMS & INFRASTRUCTURE",
+    title: "Networks & Systems",
+    description: SITE_CONFIG.description,
+    label: "NETWORKS & SYSTEMS",
   },
   work: {
     path: "/work",
@@ -27,14 +26,14 @@ export const SEO_PAGES = {
     path: "/projects",
     title: "Network & Systems Projects",
     description:
-      "Explore Muhammad Saad Shabir's projects in eBPF network enforcement, Rust packet analysis, C++ routing, and cloud infrastructure tooling.",
+      "Muhammad Saad Shabir's networking projects: ZTAP for Kubernetes eBPF policy enforcement, NetScope for Rust packet analysis, and RouteProof for C++ routing simulation.",
     label: "PROJECTS",
   },
   writing: {
     path: "/writing",
     title: "Technical Writing",
     description:
-      "Technical notes by Muhammad Saad Shabir on network security, eBPF, systems programming, and formal proofs with Lean 4.",
+      "Technical articles by Muhammad Saad Shabir on Kubernetes network policy, eBPF enforcement, zero-trust networking, and formal proofs with Lean 4.",
     label: "WRITING",
   },
   about: {

@@ -10,7 +10,6 @@ export default function ProjectsPage() {
     <div className="content-page">
       <header className="page-intro">
         <h1>Projects</h1>
-        <p>Tools for network security, traffic analysis, and system reliability.</p>
       </header>
       {PROJECT_CATEGORIES.map((category) => {
         const projects = PROJECTS.filter((project) => project.category === category.id);

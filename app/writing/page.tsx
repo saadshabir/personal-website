@@ -10,7 +10,6 @@ export default function WritingPage() {
     <div className="content-page writing-page">
       <header className="page-intro">
         <h1>Writing</h1>
-        <p>Notes on networks, systems, and the things I learn by building them.</p>
       </header>
       <div className="writing-list">
         {WRITING.map((item) => (
