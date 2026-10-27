@@ -151,8 +151,7 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outlin
 .network-visual { min-width: 0; align-self: center; }
 .network-canvas { position: relative; }
 .network-svg { display: block; width: 100%; height: auto; aspect-ratio: 640 / 390; overflow: visible; user-select: none; }
-.network-position { transform: var(--wide-position); }
-.network-link > path, .route-glow, .route-line { d: var(--wide-path); fill: none; }
+.network-link > path, .route-glow, .route-line { fill: none; }
 .network-link { outline: none; cursor: pointer; }
 .link-hit-area { stroke: transparent; stroke-width: 44; vector-effect: non-scaling-stroke; }
 .link-line { stroke: #dededc; stroke-width: 2.5; stroke-linecap: round; transition: stroke .15s; }
@@ -163,7 +162,7 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outlin
 .link-cross { fill: #b98686; font-size: 22px; pointer-events: none; paint-order: stroke; stroke: var(--background); stroke-width: 8px; }
 .route-glow { stroke-width: 10; opacity: .13; fill: none; stroke-linejoin: round; pointer-events: none; }
 .route-line { stroke-width: 3; fill: none; stroke-linecap: round; stroke-linejoin: round; pointer-events: none; }
-.network-packet { fill: #9783b2; stroke: var(--background); stroke-width: 1.5; pointer-events: none; offset-path: var(--wide-request-path); animation: request-travel var(--request-duration) linear forwards; }
+.network-packet { fill: #9783b2; stroke: var(--background); stroke-width: 1.5; pointer-events: none; offset-path: var(--request-path); animation: request-travel var(--request-duration) linear forwards; }
 @keyframes request-travel { to { offset-distance: 100%; } }
 .network-node { outline: none; cursor: help; }
 .network-node.is-interactive { cursor: pointer; }
@@ -186,9 +185,9 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outlin
 .network-tooltip > span { color: var(--foreground); }
 .network-tooltip p { width: max-content; max-width: 100%; }
 .network-notice { position: absolute; bottom: 0; left: 0; right: 0; text-align: center; color: var(--muted-foreground); font-size: 12px; line-height: 1.5; pointer-events: none; }
-.network-caption { display: flex; align-items: baseline; justify-content: space-between; gap: 20px; font-size: 12px; color: var(--muted-foreground); margin-top: 20px; }
-.network-caption > p { max-width: 42ch; }
-.network-caption button { min-height: 44px; cursor: pointer; }
+.network-caption { margin-top: 28px; font-size: 16px; color: var(--muted-foreground); }
+.network-caption > p { max-width: 38ch; }
+.network-caption button { display: block; margin-top: 4px; min-height: 44px; cursor: pointer; }
 .network-caption button:hover { color: var(--foreground); }
 .dark .hero-muted { color: #aaa; }
 .dark .hero-gradient { background-image: linear-gradient(105deg, #9eb4d0, #a2c4ba 52%, #bba1ce); }
@@ -307,9 +306,6 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outlin
 }
 @media (max-width: 480px) {
   .network-svg { aspect-ratio: 370 / 410; max-width: 370px; margin-inline: auto; }
-  .network-position { transform: var(--compact-position); }
-  .network-link > path, .route-glow, .route-line { d: var(--compact-path); }
-  .network-packet { offset-path: var(--compact-request-path); }
   .network-svg .node-label { font-size: 20px; }
   .endpoint .node-label, .gateway .node-label { transform: translate(35px, -41px); text-anchor: start; }
 }

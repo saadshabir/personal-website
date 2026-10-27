@@ -7,13 +7,12 @@ export default function Home() {
   return (
     <div className="home-page">
       <section className="network-playground" aria-labelledby="hero-title">
-        <div className="hero-copy">
+        <NetworkPlayground>
           <h1 id="hero-title">
             <span className="hero-muted">Building tools</span>{" "}
             <span className="hero-gradient">for reliable<br />systems.</span>
           </h1>
-        </div>
-        <NetworkPlayground />
+        </NetworkPlayground>
       </section>
     </div>
   );
