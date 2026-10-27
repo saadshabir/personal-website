@@ -30,7 +30,7 @@ export default function BlogPostPage() {
             .
           </p>
 
-          <h2 className="text-xl font-semibold text-foreground mt-4 mb-2">
+          <h2>
             Peano axioms
           </h2>
 
@@ -46,7 +46,7 @@ export default function BlogPostPage() {
             numbers (including 0):
           </p>
 
-          <ul className="list-disc pl-6 space-y-2">
+          <ul>
             <li>0 is a natural number,</li>
             <li>
               define the successor function S, then for every natural number n, we have
@@ -70,7 +70,7 @@ export default function BlogPostPage() {
             Using this definition of the natural numbers, we can define addition as:
           </p>
 
-          <ul className="list-disc pl-6 space-y-2">
+          <ul>
             <li>a + 0 = a,</li>
             <li>a + S(b) = S(a + b).</li>
           </ul>
@@ -100,7 +100,7 @@ open nat`}
             <code className="inline-code">succ</code> into scope for the proofs below.
           </p>
 
-          <h2 className="text-xl font-semibold text-foreground mt-4 mb-2">
+          <h2>
             first two results
           </h2>
 
@@ -144,7 +144,7 @@ open nat`}
             </code>
           </pre>
 
-          <h2 className="text-xl font-semibold text-foreground mt-4 mb-2">
+          <h2>
             towards commutativity
           </h2>
 
@@ -244,7 +244,7 @@ open nat`}
             , that S(a) + b = S(a + b) for all a, b in N. For this, we use induction on b.
           </p>
 
-          <ul className="list-disc pl-6 space-y-2">
+          <ul>
             <li>
               The base case is{" "}
               <code className="inline-code">
@@ -314,7 +314,7 @@ open nat`}
             </code>
           </pre>
 
-          <h2 className="text-xl font-semibold text-foreground mt-4 mb-2">
+          <h2>
             putting it all together
           </h2>
 
@@ -335,7 +335,7 @@ open nat`}
             </code>
           </pre>
 
-          <h2 className="text-xl font-semibold text-foreground mt-4 mb-2">
+          <h2>
             why all this work?
           </h2>
 

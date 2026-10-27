@@ -1,0 +1,76 @@
+{
+  "route": "/",
+  "html": {
+    "bytes": 25314,
+    "gzipBytes": 6424
+  },
+  "summary": {
+    "javascript": {
+      "files": 7,
+      "bytes": 483400,
+      "gzipBytes": 145059
+    },
+    "styles": {
+      "files": 1,
+      "bytes": 19199,
+      "gzipBytes": 5467
+    },
+    "preloadedFonts": {
+      "files": 2,
+      "bytes": 55676,
+      "gzipBytes": 55732
+    }
+  },
+  "assets": [
+    {
+      "url": "/_next/static/chunks/0gvj2sn_4vlo5.js",
+      "bytes": 8505,
+      "gzipBytes": 3220
+    },
+    {
+      "url": "/_next/static/chunks/1ckvzn7sfprko.js",
+      "bytes": 5584,
+      "gzipBytes": 2035
+    },
+    {
+      "url": "/_next/static/chunks/2e268anpfvdoc.js",
+      "bytes": 168355,
+      "gzipBytes": 46367
+    },
+    {
+      "url": "/_next/static/chunks/2gvu8dyrhibpa.js",
+      "bytes": 229597,
+      "gzipBytes": 71899
+    },
+    {
+      "url": "/_next/static/chunks/2r4s4h5xul1n-.js",
+      "bytes": 28739,
+      "gzipBytes": 7624
+    },
+    {
+      "url": "/_next/static/chunks/2ri2a5u1xzgeo.css",
+      "bytes": 19199,
+      "gzipBytes": 5467
+    },
+    {
+      "url": "/_next/static/chunks/3ja6h4hdadgez.js",
+      "bytes": 31365,
+      "gzipBytes": 9524
+    },
+    {
+      "url": "/_next/static/chunks/turbopack-2c3mg3r-05n1w.js",
+      "bytes": 11255,
+      "gzipBytes": 4390
+    },
+    {
+      "url": "/_next/static/media/caa3a2e1cccd8315-s.p.0wgildi0cnwt9.woff2",
+      "bytes": 29288,
+      "gzipBytes": 29316
+    },
+    {
+      "url": "/_next/static/media/noto_nastaliq_urdu_name-s.p.0q8acx3s29kiz.woff2",
+      "bytes": 26388,
+      "gzipBytes": 26416
+    }
+  ]
+}

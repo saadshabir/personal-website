@@ -14,7 +14,7 @@ export default function RelatedProject({
   return (
     <nav
       aria-label="Related project"
-      className="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-muted-foreground"
+      className="related-project"
     >
       <span>Project</span>
       <Link

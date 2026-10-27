@@ -13,7 +13,7 @@ export default function BlogPostPage() {
 
       <article className="article-prose">
         <div className="article-body">
-          <aside className="border-l-2 border-[var(--surface-border)] pl-4 text-base text-muted-foreground">
+          <aside className="article-note">
             this post describes an earlier version of ZTAP. the commands, policy
             model, and backends have since changed. i wrote about the current agent
             in{" "}
@@ -22,7 +22,7 @@ export default function BlogPostPage() {
             </Link>
             .
           </aside>
-          <h2 className="text-xl font-semibold text-foreground mt-4 mb-2">
+          <h2>
             the iptables honeymoon (and the crash)
           </h2>
 
@@ -36,7 +36,7 @@ export default function BlogPostPage() {
             “iptables is easy,” a tutorial said. “just follow these steps:”
           </p>
 
-          <ol className="list-decimal pl-6 space-y-2">
+          <ol>
             <li>create a custom chain</li>
             <li>append rules for incoming traffic</li>
             <li>lock down the default policy to drop</li>
@@ -77,7 +77,7 @@ export default function BlogPostPage() {
 
           <p>that night crystallized what i actually wanted:</p>
 
-          <ul className="list-disc pl-6 space-y-2">
+          <ul>
             <li>
               <strong>high performance</strong> under lots of rules
             </li>
@@ -92,7 +92,7 @@ export default function BlogPostPage() {
 
           <p>that’s when i started taking eBPF seriously.</p>
 
-          <h2 className="text-xl font-semibold text-foreground mt-4 mb-2">
+          <h2>
             compiling without compilers
           </h2>
 
@@ -192,7 +192,7 @@ defer ingressLink.Close()`}
             toolchain onto the node.
           </p>
 
-          <h2 className="text-xl font-semibold text-foreground mt-4 mb-2">
+          <h2>
             atomic updates, one hook at a time
           </h2>
 
@@ -223,7 +223,7 @@ defer ingressLink.Close()`}
             with eBPF, the rollout can prepare the next policy before changing enforcement:
           </p>
 
-          <ol className="list-decimal pl-6 space-y-2">
+          <ol>
             <li>load a <strong>new</strong> eBPF program and its maps</li>
             <li>populate the policy maps with the <strong>next</strong> policy state</li>
             <li>replace each cgroup attachment with its new program</li>
@@ -275,7 +275,7 @@ func (e *eBPFEnforcer) UpdateFrom(old *eBPFEnforcer) error {
             of the links.
           </p>
 
-          <ul className="list-disc pl-6 space-y-2">
+          <ul>
             <li>the old programs keep enforcing while the next policy is prepared</li>
             <li>each hook changes atomically, with a mixed-policy interval between updates</li>
             <li>
@@ -296,7 +296,7 @@ func (e *eBPFEnforcer) UpdateFrom(old *eBPFEnforcer) error {
             looks like:
           </p>
 
-          <ul className="list-disc pl-6 space-y-2">
+          <ul>
             <li>direction: egress vs ingress</li>
             <li>protocol: tcp/udp/icmp</li>
             <li>port: l4 port (or 0 for icmp)</li>
@@ -356,7 +356,7 @@ struct policy_value *v = bpf_map_lookup_elem(&policy_map, &k);
             policy” and “the exact workload that policy applies to.”
           </p>
 
-          <h3 className="text-lg font-semibold text-foreground mt-4 mb-2">
+          <h3>
             default deny, and the subtlety of ‘selected only’
           </h3>
 
@@ -409,7 +409,7 @@ if (selected_only) {
 
           <p>that sounds like a footnote, but it’s the difference between:</p>
 
-          <ul className="list-disc pl-6 space-y-2">
+          <ul>
             <li>“this node is now a default-deny firewall for every process”</li>
             <li>“this policy applies to the workloads i selected, and nothing else”</li>
           </ul>
@@ -419,7 +419,7 @@ if (selected_only) {
             out.
           </p>
 
-          <h3 className="text-lg font-semibold text-foreground mt-4 mb-2">
+          <h3>
             flows as a first-class output
           </h3>
 
@@ -512,7 +512,7 @@ for event := range monitor.Subscribe(ctx) {
             it.
           </p>
 
-          <h2 className="text-xl font-semibold text-foreground mt-4 mb-2">
+          <h2>
             making it work everywhere
           </h2>
 
@@ -525,7 +525,7 @@ for event := range monitor.Subscribe(ctx) {
 
           <p>so the design is intentionally layered:</p>
 
-          <ul className="list-disc pl-6 space-y-2">
+          <ul>
             <li>the <strong>policy model</strong> stays the same</li>
             <li>
               a <strong>compiler</strong> stage turns policies into enforceable primitives
@@ -551,7 +551,7 @@ for event := range monitor.Subscribe(ctx) {
             update and recovery guarantees.
           </p>
 
-          <h2 className="text-xl font-semibold text-foreground mt-4 mb-2">
+          <h2>
             closing thoughts
           </h2>
 
@@ -572,7 +572,7 @@ for event := range monitor.Subscribe(ctx) {
             the bar i’d aim for:
           </p>
 
-          <ul className="list-disc pl-6 space-y-2">
+          <ul>
             <li>make policy changes safe</li>
             <li>make enforcement observable</li>
             <li>make the runtime surface area boring</li>
