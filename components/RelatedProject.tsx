@@ -21,7 +21,7 @@ export default function RelatedProject({
         href={`/projects#${project.name.toLowerCase()}`}
         className="related-link"
       >
-        {project.name} <span aria-hidden="true">→</span>
+        {project.name}
       </Link>
       {showSource ? (
         <>
@@ -32,7 +32,7 @@ export default function RelatedProject({
             rel="noopener noreferrer"
             className="related-link"
           >
-            GitHub <span aria-hidden="true">↗</span>
+            GitHub
           </a>
         </>
       ) : null}

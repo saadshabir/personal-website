@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next";
 import { SITE_CONFIG, WRITING } from "@/lib/constants";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const staticRoutes = ["/", "/work", "/projects", "/writing"];
+  const staticRoutes = ["/", "/work", "/projects", "/writing", "/about"];
 
   return [
     ...staticRoutes,

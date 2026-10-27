@@ -6,42 +6,17 @@ interface ExperienceCardProps {
   link: string;
 }
 
-export default function ExperienceCard({
-  position,
-  company,
-  dates,
-  description,
-  link,
-}: ExperienceCardProps) {
+export default function ExperienceCard({ position, company, dates, description, link }: ExperienceCardProps) {
   return (
-    <div className="relative flex flex-col gap-2 py-4">
-      {link && link !== "#" ? (
-        <a
-          href={link}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="group w-fit flex items-center gap-1 font-bold text-foreground hover:text-muted-foreground transition-colors"
-        >
-          <h3 className="text-current">
-            {position} @ {company}
-          </h3>
-          <span aria-hidden="true" className="text-current ml-0.5">
-            ↗
-          </span>
-        </a>
-      ) : (
-        <div className="w-fit flex items-center gap-1 font-bold text-foreground">
-          <h3>
-            {position} @ {company}
-          </h3>
-        </div>
-      )}
-      <p className="font-medium text-muted-foreground">{dates}</p>
-      {description.map((item, index) => (
-        <p key={index} className="font-medium text-foreground">
-          {item}
+    <article className="experience-row">
+      <p className="experience-date">{dates}</p>
+      <div>
+        <h3>{position}</h3>
+        <p className="experience-company">
+          {link && link !== "#" ? <a className="text-link" href={link} target="_blank" rel="noopener noreferrer">{company}</a> : company}
         </p>
-      ))}
-    </div>
+        {description.map((text) => <p className="experience-description" key={text}>{text}</p>)}
+      </div>
+    </article>
   );
 }

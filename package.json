@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "perf:assets": "node scripts/measure-page-assets.mjs"
   },
   "dependencies": {
     "@vercel/analytics": "^2.0.1",

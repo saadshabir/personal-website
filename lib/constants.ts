@@ -133,12 +133,12 @@ export const PROJECTS: readonly Project[] = [
 
 export const WRITING: readonly WritingEntry[] = [
   {
-    id: "003",
-    title: "ZTAP, with a Smaller Surface",
+    id: "004",
+    title: "ZTAP: Native Policy, Persistent Enforcement",
     description:
-      "How ZTAP became a focused Kubernetes NetworkPolicy agent: native selectors, per-container eBPF, policy snapshots, and the limits measured along the way.",
-    publishedAt: "2026-10-03",
-    url: "/writing/ztap-with-a-smaller-surface",
+      "How ZTAP turns native Kubernetes NetworkPolicy into per-container eBPF enforcement, commits policy snapshots, and preserves them through agent restarts.",
+    publishedAt: "2026-10-26",
+    url: "/writing/ztap-native-policy-persistent-enforcement",
     projectId: "001",
   },
   {
