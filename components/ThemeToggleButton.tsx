@@ -10,7 +10,7 @@ export function ThemeToggleButton({ children }: { children: ReactNode }) {
     <button
       type="button"
       onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
-      className="flex items-center justify-center text-muted-foreground transition-colors hover:text-foreground"
+      className="theme-toggle"
       aria-label="Toggle theme"
     >
       {children}

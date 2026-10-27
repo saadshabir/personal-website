@@ -3,7 +3,7 @@ import { Geist } from "next/font/google";
 import localFont from "next/font/local";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-import { ThemeProvider } from "@/components/ThemeProvider";
+import { ThemeProvider } from "next-themes";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import { SITE_CONFIG } from "@/lib/constants";
@@ -107,7 +107,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${geist.variable} ${urdu.variable}`} data-scroll-behavior="smooth" suppressHydrationWarning>
-      <body className="min-h-screen font-sans antialiased">
+      <body>
         <ThemeProvider
           attribute="class"
           defaultTheme="light"

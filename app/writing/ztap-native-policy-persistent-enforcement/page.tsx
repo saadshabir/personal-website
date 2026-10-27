@@ -241,22 +241,22 @@ commit the snapshot for the eBPF ingress / egress hooks`}</code></pre>
             kind deployment exercised a three-second pause, a kill with replacement
             delayed under the node lock, compatible image replacement, and rollback.
           </p>
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-sm leading-relaxed">
-              <caption className="mb-3 text-left text-muted-foreground">
+          <div className="table-scroll">
+            <table className="measurement-table">
+              <caption>
                 October 9, 2026: existing-workload restart observations
               </caption>
-              <thead className="border-b border-[var(--surface-border)]">
+              <thead>
                 <tr>
-                  <th scope="col" className="py-3 pr-4 font-medium">observation</th>
-                  <th scope="col" className="py-3 font-medium">result</th>
+                  <th scope="col">observation</th>
+                  <th scope="col">result</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[var(--surface-border)]">
-                <tr><th scope="row" className="py-3 pr-4 font-normal">observation interval</th><td className="py-3 whitespace-nowrap">52.232 seconds</td></tr>
-                <tr><th scope="row" className="py-3 pr-4 font-normal">prohibited TCP connections</th><td className="py-3">0</td></tr>
-                <tr><th scope="row" className="py-3 pr-4 font-normal">allowed ingress responses</th><td className="py-3">5,423</td></tr>
-                <tr><th scope="row" className="py-3 pr-4 font-normal">allowed egress responses</th><td className="py-3">5,424</td></tr>
+              <tbody>
+                <tr><th scope="row">observation interval</th><td className="measurement-value">52.232 seconds</td></tr>
+                <tr><th scope="row">prohibited TCP connections</th><td>0</td></tr>
+                <tr><th scope="row">allowed ingress responses</th><td>5,423</td></tr>
+                <tr><th scope="row">allowed egress responses</th><td>5,424</td></tr>
               </tbody>
             </table>
           </div>

@@ -11,7 +11,6 @@ export const SITE_CONFIG = {
   jobTitle: "Network Technician & Software Developer",
   school: "Carleton University",
   schoolUrl: "https://carleton.ca/",
-  status: "Currently exploring new experiences.",
 } as const;
 
 type ProjectCategory = "active" | "past" | "earlier-experiments";

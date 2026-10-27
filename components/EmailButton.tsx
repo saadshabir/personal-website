@@ -43,7 +43,7 @@ export default function EmailButton({
         type="button"
         onClick={handleEmailClick}
         aria-label="Copy email address"
-        className="text-link cursor-pointer text-left"
+        className="text-link email-copy"
       >
         {isCopied ? "Copied" : "Email"}
       </button>
@@ -51,11 +51,11 @@ export default function EmailButton({
         {isCopied ? "Email address copied." : ""}
       </span>
       {copyFailed && (
-        <span role="status" className="basis-full text-sm text-muted-foreground">
+        <span role="status" className="email-copy-error">
           Couldn&apos;t copy. Email{" "}
           <a
             href={`mailto:${email}`}
-            className="text-link break-all"
+            className="text-link email-address"
           >
             {email}
           </a>
@@ -63,7 +63,7 @@ export default function EmailButton({
         </span>
       )}
       <noscript>
-        <a href={`mailto:${email}`} className="text-link break-all">
+        <a href={`mailto:${email}`} className="text-link email-address">
           {email}
         </a>
       </noscript>
