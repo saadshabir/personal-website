@@ -5,9 +5,9 @@
   "display": "standalone",
   "background_color": "#fafafa",
   "theme_color": "#fafafa",
-  "description": "Focusing on network architecture, protocol analysis, and system programming.",
+  "description": "Muhammad Saad Shabir, a Network Technology student at Carleton University, building tools for network security, routing simulation, and packet analysis.",
   "orientation": "portrait-primary",
   "scope": "/",
-  "lang": "en-US",
+  "lang": "en-CA",
   "categories": ["portfolio", "technology", "networking"]
 }

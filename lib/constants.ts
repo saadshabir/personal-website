@@ -7,7 +7,7 @@ export const SITE_CONFIG = {
   resume: "/MuhammadSaad-Shabir_Resume.pdf",
   location: "Ottawa, Canada",
   description:
-    "Focusing on network architecture, protocol analysis, and system programming.",
+    "Muhammad Saad Shabir, a Network Technology student at Carleton University, building tools for network security, routing simulation, and packet analysis.",
   jobTitle: "Network Technician & Software Developer",
   school: "Carleton University",
   schoolUrl: "https://carleton.ca/",
