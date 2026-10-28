@@ -15,7 +15,7 @@ export default function ArticleHeader({ slug, title }: { slug: string; title?: s
       <time dateTime={article.publishedAt}>{formatWritingDate(article.publishedAt, "long")}</time>
       {article.projectId && (
         <div className="article-actions">
-          <RelatedProject projectId={article.projectId} showSource />
+          <RelatedProject projectId={article.projectId} />
         </div>
       )}
     </header>

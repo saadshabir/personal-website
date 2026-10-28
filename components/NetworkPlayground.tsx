@@ -1,275 +1,164 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
-import type { CSSProperties, KeyboardEvent, ReactNode } from "react";
-import { DEMO_LINKS, DEMO_NODES, findDemoRoute, type DemoNodeId } from "@/lib/network-demo";
+import { useCallback, useEffect, useId, useRef, useState } from "react";
+import type { ReactNode } from "react";
+import {
+  DEMO_NODES, activeRoute, inspectedPacket, networkMessage, nodePosition,
+  packetPoint, packetStatus, routePath,
+} from "@/lib/network-demo";
+import NetworkPackets from "@/components/NetworkPackets";
+import { useNetworkLab } from "@/components/useNetworkLab";
 
-const nodesById = Object.fromEntries(DEMO_NODES.map((node) => [node.id, node])) as Record<DemoNodeId, (typeof DEMO_NODES)[number]>;
-const getNode = (id: DemoNodeId) => nodesById[id];
-const COMPACT_POSITIONS: Record<DemoNodeId, { x: number; y: number }> = {
-  client: { x: 185, y: 48 },
-  gateway: { x: 185, y: 138 },
-  "api-a": { x: 85, y: 248 },
-  "api-b": { x: 285, y: 248 },
-  database: { x: 185, y: 358 },
-};
-const getPosition = (id: DemoNodeId, compact = false) => compact ? COMPACT_POSITIONS[id] : getNode(id);
-const getPath = (ids: readonly DemoNodeId[], compact = false) => ids.map((id, index) => {
-  const node = getPosition(id, compact);
-  return `${index ? "L" : "M"} ${node.x} ${node.y}`;
-}).join(" ");
-const REQUEST_DURATION_MS = 2200;
-type NetworkStyle = CSSProperties & { [key: `--${string}`]: string };
-
-// Geometry is static; only route and availability change during interaction.
-const links = DEMO_LINKS.map((link) => {
-  const from = getNode(link.from);
-  const to = getNode(link.to);
-  return {
-    ...link,
-    label: `${from.label} to ${to.label}`,
-    path: getPath([link.from, link.to]),
-    compactPath: getPath([link.from, link.to], true),
-  };
-});
-
-function activateWithKeyboard(event: KeyboardEvent<SVGGElement>, action: () => void) {
-  if (event.key === "Enter" || event.key === " ") {
-    event.preventDefault();
-    action();
-  }
+function ControlIcon({ kind }: { kind: "link" | "policy" | "pause" | "play" | "reset" | "close" }) {
+  return <svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    {kind === "link" && <><path d="m8 12 4-4M6 13l-1 1a3 3 0 0 1-4-4l3-3a3 3 0 0 1 4 0M12 7l1-1a3 3 0 0 1 4 4l-3 3a3 3 0 0 1-4 0" transform="translate(1 0)" /></>}
+    {kind === "policy" && <path d="m10 2 6 2.5V9c0 4-2.5 6.5-6 9-3.5-2.5-6-5-6-9V4.5ZM7 10h6" />}
+    {kind === "pause" && <path d="M7 5v10M13 5v10" />}
+    {kind === "play" && <path d="m7 4 9 6-9 6Z" />}
+    {kind === "reset" && <><path d="M4 7a6 6 0 1 1 0 6M4 3v4h4" /></>}
+    {kind === "close" && <path d="m5 5 10 10M15 5 5 15" />}
+  </svg>;
 }
 
 export default function NetworkPlayground({ children }: { children: ReactNode }) {
-  const [disabledLinks, setDisabledLinks] = useState<string[]>([]);
-  const [pausedServices, setPausedServices] = useState<DemoNodeId[]>([]);
-  const [requestId, setRequestId] = useState<number | null>(null);
-  const [notice, setNotice] = useState("");
-  const [announcement, setAnnouncement] = useState("");
-  const [hoveredNode, setHoveredNode] = useState<DemoNodeId | null>(null);
-  const [focusedNode, setFocusedNode] = useState<DemoNodeId | null>(null);
-  const [reducedMotion, setReducedMotion] = useState(true);
+  const { state, model, paint, dispatch, reducedMotion } = useNetworkLab();
   const [compact, setCompact] = useState(false);
-  const requestSequence = useRef(0);
+  const prefix = useId();
+  const inspectorRef = useRef<HTMLDivElement>(null);
+  const closeRef = useRef<HTMLButtonElement>(null);
+  const inspectRef = useRef<HTMLButtonElement>(null);
+  const returnFocus = useRef<Element | null>(null);
+  const selected = inspectedPacket(state);
+  const isInspecting = !!selected;
+  const route = activeRoute(state);
 
   useEffect(() => {
-    const media = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const update = () => setReducedMotion(media.matches);
+    const narrow = window.matchMedia("(max-width: 480px)");
+    const update = () => setCompact(narrow.matches);
     update();
-    media.addEventListener("change", update);
-    return () => media.removeEventListener("change", update);
+    narrow.addEventListener("change", update);
+    return () => narrow.removeEventListener("change", update);
   }, []);
+
+  const selectPacket = useCallback((id: number | "latest") => {
+    returnFocus.current = document.activeElement;
+    dispatch({ type: "select-packet", id });
+  }, [dispatch]);
+
+  const closeInspector = useCallback((restoreFocus = true) => {
+    dispatch({ type: "select-packet", id: null });
+    if (restoreFocus) {
+      const target = returnFocus.current;
+      if (target instanceof HTMLElement && target !== document.body && target.isConnected) target.focus();
+      else inspectRef.current?.focus();
+    }
+  }, [dispatch]);
 
   useEffect(() => {
-    const media = window.matchMedia("(max-width: 480px)");
-    const update = () => setCompact(media.matches);
-    update();
-    media.addEventListener("change", update);
-    return () => media.removeEventListener("change", update);
-  }, []);
-
-  const route = useMemo(() => findDemoRoute(disabledLinks, pausedServices), [disabledLinks, pausedServices]);
-  const routeKey = route.join(",");
-  const routeStyle = useMemo((): NetworkStyle => {
-    const roundTrip = [...route, ...route.slice(0, -1).reverse()];
-    return {
-      "--request-path": `path("${getPath(roundTrip, compact)}")`,
-      "--request-duration": `${REQUEST_DURATION_MS}ms`,
+    if (!isInspecting) return;
+    closeRef.current?.focus();
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") { event.preventDefault(); closeInspector(); }
     };
-  }, [route, compact]);
-  const routePath = getPath(route, compact);
-  const serviceLabel = route.find((id) => getNode(id).kind === "service");
-  const via = serviceLabel ? getNode(serviceLabel).label : "a service";
-  const infoNode = hoveredNode ?? focusedNode;
-  const nodeInfo = infoNode ? getNode(infoNode) : null;
-  const inFlight = requestId !== null && route.length > 0;
+    const onOutside = (event: PointerEvent) => {
+      if (event.target instanceof Node && !inspectorRef.current?.contains(event.target)
+        && !inspectRef.current?.contains(event.target)) closeInspector(false);
+    };
+    document.addEventListener("keydown", onKey);
+    document.addEventListener("pointerdown", onOutside);
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.removeEventListener("pointerdown", onOutside);
+    };
+  }, [isInspecting, closeInspector]);
 
-  useEffect(() => {
-    if (requestId === null) return;
-    if (!routeKey) {
-      setRequestId(null);
-      setNotice("No route available.");
-      setAnnouncement("Request stopped. No route available. Restore a connection or service.");
-      return;
-    }
-    setAnnouncement(`Request sent through ${via}.`);
-    const timer = window.setTimeout(() => {
-      setRequestId(null);
-      setNotice(`Request returned through ${via}.`);
-      setAnnouncement(`Request delivered to the database and returned through ${via}.`);
-    }, reducedMotion ? 300 : REQUEST_DURATION_MS);
-    return () => window.clearTimeout(timer);
-  }, [requestId, routeKey, via, reducedMotion]);
-
-  useEffect(() => {
-    if (!notice) return;
-    const timer = window.setTimeout(() => setNotice(""), 3500);
-    return () => window.clearTimeout(timer);
-  }, [notice]);
-
-  function describeRoute(links: readonly string[], services: readonly DemoNodeId[]) {
-    const next = findDemoRoute(links, services);
-    const service = next.find((id) => getNode(id).kind === "service");
-    return service ? `Requests use ${getNode(service).label}.` : "No route available.";
-  }
-
-  function toggleLink(id: string) {
-    const next = disabledLinks.includes(id)
-      ? disabledLinks.filter((link) => link !== id)
-      : [...disabledLinks, id];
-    setDisabledLinks(next);
-    const description = describeRoute(next, pausedServices);
-    setNotice(description);
-    const link = links.find((item) => item.id === id)!;
-    setAnnouncement(`${link.label} ${next.includes(id) ? "disconnected" : "restored"}. ${description}`);
-  }
-
-  function toggleService(id: DemoNodeId) {
-    const next = pausedServices.includes(id)
-      ? pausedServices.filter((service) => service !== id)
-      : [...pausedServices, id];
-    setPausedServices(next);
-    const description = `${getNode(id).label} ${next.includes(id) ? "paused" : "restarted"}. ${describeRoute(disabledLinks, next)}`;
-    setNotice(description);
-    setAnnouncement(description);
-  }
-
-  function sendRequest() {
-    setNotice("");
-    if (!route.length) {
-      setNotice("No route available.");
-      setAnnouncement("Request could not be sent. Restore a connection or service.");
-      return;
-    }
-    setRequestId(++requestSequence.current);
-  }
-
-  function reset() {
-    setDisabledLinks([]);
-    setPausedServices([]);
-    setRequestId(null);
-    setNotice("");
-    setHoveredNode(null);
-    setFocusedNode(null);
-    setAnnouncement("Network reset. All connections and services are available.");
-  }
+  const breakPoint = packetPoint({ route: "a", progress: 0.24 }, compact);
 
   return (
     <>
       <div className="hero-copy">
         {children}
-        <div className="network-caption">
-          <p id="network-instructions">Click Client to send a request.<br />Break a link or pause a service.</p>
-          <button type="button" onClick={reset}>Reset</button>
-        </div>
+        <p className="network-caption">Change the network.<br />See what happens to the traffic.</p>
       </div>
       <div className="network-visual">
         <div className="network-canvas">
-          <svg
-            className={`network-svg${inFlight ? " has-request" : ""}`}
-            // Native SVG geometry keeps links visible in mobile browsers that do
-            // not support the CSS d property. Both layouts share one graph.
-            viewBox={compact ? "0 0 370 410" : "0 0 640 390"}
-            style={routeStyle}
-            role="group"
-            aria-labelledby="network-title"
-            aria-describedby="network-description network-instructions"
-            onKeyDown={(event) => {
-              if (event.key === "Escape") { setHoveredNode(null); setFocusedNode(null); }
-            }}
-          >
-            <title id="network-title">A small resilient service network</title>
-            <desc id="network-description">Click Client to send a request. Click connections to disconnect or restore them. Click API A or API B to pause or restart a service. Requests use an available service and return to the client. Hover or focus a node to learn what it does. This is an illustrative simulation.</desc>
-            <defs>
-              <linearGradient id="route-gradient" x1="0" y1="0" x2="1" y2="0">
-                <stop offset="0%" stopColor="#94abc9" />
-                <stop offset="45%" stopColor="#9fc2bc" />
-                <stop offset="100%" stopColor="#b09bc6" />
-              </linearGradient>
-            </defs>
-
-            {links.map((link) => {
-              const disabled = disabledLinks.includes(link.id);
-              const unavailable = pausedServices.includes(link.from) || pausedServices.includes(link.to);
-              const from = getPosition(link.from, compact);
-              const to = getPosition(link.to, compact);
-              const path = compact ? link.compactPath : link.path;
-              return (
-                <g
-                  key={link.id}
-                  className={`network-link${disabled ? " is-disconnected" : ""}${unavailable ? " is-unavailable" : ""}`}
-                  role="button"
-                  tabIndex={0}
-                  aria-label={`${disabled ? "Restore" : "Disconnect"} link ${link.label}`}
-                  aria-pressed={disabled}
-                  onClick={() => toggleLink(link.id)}
-                  onKeyDown={(event) => activateWithKeyboard(event, () => toggleLink(link.id))}
-                >
-                  <path className="link-hit-area" d={path} />
-                  <path className="link-line" d={path} />
-                  {disabled && <text className="link-cross" x={(from.x + to.x) / 2} y={(from.y + to.y) / 2 + 6} textAnchor="middle" aria-hidden="true">×</text>}
-                </g>
-              );
-            })}
-
-            {route.length > 0 && <path className="route-glow" d={routePath} stroke="url(#route-gradient)" />}
-            {route.length > 0 && <path className="route-line" d={routePath} stroke="url(#route-gradient)" />}
-            {inFlight && !reducedMotion && (
-              <circle key={`${requestId}:${routeKey}`} r="5" className="network-packet" />
-            )}
-
+          <svg className="network-svg" viewBox={compact ? "0 0 370 370" : "0 0 620 370"}
+            role="group" aria-labelledby={prefix + "-title"} aria-describedby={prefix + "-description"}>
+            <title id={prefix + "-title"}>An interactive network</title>
+            <desc id={prefix + "-description"}>Traffic travels from Source through Router A or Router B to Destination. Break the primary link to use the backup route, or block traffic at the destination. Use Inspect a packet for keyboard-accessible packet details.</desc>
+            {(["a", "b"] as const).map((id) => ([0, 1] as const).map((half) => {
+              const broken = id === "a" && half === 0 && state.linkBroken;
+              const selectedPath = selected?.route === id;
+              return <g key={id + half} className={`network-link${route === id ? " is-active" : ""}${broken ? " is-broken" : ""}${selectedPath ? " is-inspected" : ""}`}>
+                <path className="route-underlay" d={routePath(id, half, compact)} />
+                <path className="route-line" d={routePath(id, half, compact)} />
+              </g>;
+            }))}
+            {state.linkBroken && <g className="link-break" transform={`translate(${breakPoint.x} ${breakPoint.y})`} aria-hidden="true">
+              <circle r="10" /><path d="m-3-3 6 6m0-6-6 6" />
+            </g>}
+            <NetworkPackets model={model} paint={paint} compact={compact} reducedMotion={reducedMotion} onSelect={selectPacket} />
             {DEMO_NODES.map((node) => {
-              const position = getPosition(node.id, compact);
-              const isService = node.kind === "service";
-              const paused = pausedServices.includes(node.id);
-              const action = node.kind === "client" ? sendRequest : isService ? () => toggleService(node.id) : undefined;
-              const label = node.kind === "client" ? "Send a request from Client" : isService ? `${paused ? "Restart" : "Pause"} ${node.label} service` : `${node.label}. ${node.description}`;
-              return (
-                <g
-                  key={node.id}
-                  className={`network-node ${node.kind}${action ? " is-interactive" : ""}${node.kind === "client" || node.kind === "database" ? " endpoint" : ""}${route.includes(node.id) ? " on-route" : ""}${paused ? " is-paused" : ""}${inFlight && node.kind === "client" ? " is-sending" : ""}`}
-                  transform={`translate(${position.x}, ${position.y})`}
-                  role={action ? "button" : "img"}
-                  tabIndex={0}
-                  aria-label={label}
-                  aria-pressed={isService ? paused : undefined}
-                  aria-describedby={infoNode === node.id ? "network-tooltip" : undefined}
-                  onClick={action}
-                  onKeyDown={action ? (event) => activateWithKeyboard(event, action) : undefined}
-                  onMouseEnter={() => setHoveredNode(node.id)}
-                  onMouseLeave={() => setHoveredNode(null)}
-                  onFocus={() => { setFocusedNode(node.id); setHoveredNode(null); }}
-                  onBlur={() => setFocusedNode(null)}
-                >
-                  <circle className="node-hit-area" r="22" />
-                  <circle className="node-halo" r="28" />
-                  <circle className="node-body" r="18" />
-                  {node.kind === "client" ? (
-                    <>
-                      <rect x="-8" y="-6" width="16" height="10" rx="1.5" className="endpoint-icon" />
-                      <path d="M 0 4 V 8 M -5 8 H 5" className="endpoint-icon" />
-                    </>
-                  ) : node.kind === "database" ? (
-                    <>
-                      <ellipse className="endpoint-icon" cy="-5" rx="7" ry="3" />
-                      <path className="endpoint-icon" d="M -7 -5 V 5 C -7 9 7 9 7 5 V -5 M -7 0 C -7 4 7 4 7 0" />
-                    </>
-                  ) : paused ? <path className="node-pause" d="M -4 -5 V 5 M 4 -5 V 5" /> : <circle className="node-center" r="4" />}
-                  <text y="47" textAnchor="middle" className="node-label" aria-hidden="true">{node.label}</text>
-                </g>
-              );
+              const point = nodePosition(node.id, compact);
+              const endpoint = node.id === "source" || node.id === "destination";
+              const blocked = node.id === "destination" && state.policyBlocked;
+              const active = endpoint || node.id === (route === "a" ? "router-a" : "router-b");
+              const labelX = compact ? endpoint ? 36 : node.id === "router-a" ? -26 : 26 : 0;
+              const labelAnchor = compact ? node.id === "router-a" ? "end" : "start" : "middle";
+              return <g key={node.id} transform={`translate(${point.x} ${point.y})`}
+                className={`network-node${endpoint ? " endpoint" : ""}${active ? " is-active" : ""}${blocked ? " is-blocked" : ""}`} aria-hidden="true">
+                <circle className="node-halo" r="28" />
+                {blocked && <circle className="policy-ring" r="27" />}
+                <circle className="node-body" r={endpoint ? 21 : 18} />
+                {node.id === "source" ? <g className="node-icon">
+                  <rect x="-8" y="-6" width="16" height="11" rx="2" /><path d="M-4 9h8M0 5v4" />
+                </g> : node.id === "destination" ? <g className="node-icon">
+                  {blocked ? <><rect x="-6" y="-1" width="12" height="9" rx="2" /><path d="M-4-1v-3a4 4 0 0 1 8 0v3" /></>
+                    : <><rect x="-8" y="-8" width="16" height="16" rx="3" /><path d="M-4-3h8M-4 3h8" /></>}
+                </g> : <path className="node-icon" d="M-8-4H6m-3-3 3 3-3 3M8 4H-6m3-3-3 3 3 3" />}
+                <text className="node-label" x={labelX} y={compact ? 5 : 47} textAnchor={labelAnchor}>{node.label}</text>
+              </g>;
             })}
           </svg>
-          {nodeInfo && (
-            <div id="network-tooltip" className="network-tooltip" role="tooltip">
-              <span>{nodeInfo.label}</span>
-              <p>{nodeInfo.kind === "service" ? pausedServices.includes(nodeInfo.id) ? "Paused. Click to restart." : "Handles requests. Click to pause." : nodeInfo.description}</p>
+          {selected && <div className="packet-inspector" ref={inspectorRef} role="dialog" aria-modal="false"
+            aria-labelledby={prefix + "-packet-title"} id={prefix + "-inspector"}>
+            <div className="packet-heading">
+              <span id={prefix + "-packet-title"}>{selected.sample ? "Sample packet" : `Packet ${String(selected.id).padStart(3, "0")}`}</span>
+              <button ref={closeRef} type="button" onClick={() => closeInspector()} aria-label="Close packet details"><ControlIcon kind="close" /></button>
             </div>
-          )}
-          <p className="network-notice" aria-hidden="true">{notice}</p>
+            <dl>
+              <div><dt>Route</dt><dd>Source → Router {selected.route.toUpperCase()}<br />→ Destination</dd></div>
+              <div><dt>Protocol</dt><dd>TCP · port 443</dd></div>
+              <div><dt>Outcome</dt><dd data-status={selected.status}>{packetStatus(selected)}</dd></div>
+            </dl>
+          </div>}
         </div>
-        <p className="sr-only" role="status" aria-live="polite" aria-atomic="true">{announcement}</p>
-        <noscript>Enable JavaScript to send requests and change the network.</noscript>
+        <div className="network-controls">
+          <div className="network-actions">
+            <button type="button" className="network-action link-action" aria-pressed={state.linkBroken} onClick={() => dispatch({ type: "toggle-link" })}>
+              <ControlIcon kind="link" />{state.linkBroken ? "Restore link" : "Break a link"}
+            </button>
+            <button type="button" className="network-action policy-action" aria-pressed={state.policyBlocked} onClick={() => dispatch({ type: "toggle-policy" })}>
+              <ControlIcon kind="policy" />{state.policyBlocked ? "Allow traffic" : "Block traffic"}
+            </button>
+          </div>
+          <div className="network-utilities">
+            {!reducedMotion && <button type="button" className="network-icon-button" aria-label={state.running ? "Pause traffic" : "Resume traffic"} title={state.running ? "Pause traffic" : "Resume traffic"}
+              onClick={() => dispatch({ type: "set-running", running: !state.running })}><ControlIcon kind={state.running ? "pause" : "play"} /></button>}
+            <button type="button" className="network-icon-button" aria-label="Reset network" title="Reset network" onClick={() => dispatch({ type: "reset" })}><ControlIcon kind="reset" /></button>
+          </div>
+        </div>
+        <p className="network-result" role="status" aria-live="polite" aria-atomic="true">
+          <span className={`result-dot${state.policyBlocked ? " is-blocked" : state.linkBroken ? " is-rerouted" : ""}`} aria-hidden="true" />
+          <span>{!state.running && !reducedMotion ? "Paused. " : ""}{networkMessage(state)}</span>
+        </p>
+        <div className="network-footnote">
+          <span>Illustrative simulation</span>
+          <button type="button" ref={inspectRef} aria-expanded={isInspecting} aria-controls={prefix + "-inspector"}
+            onClick={() => isInspecting ? closeInspector() : selectPacket("latest")}>
+            Inspect a packet <span aria-hidden="true">↗</span>
+          </button>
+        </div>
       </div>
     </>
   );

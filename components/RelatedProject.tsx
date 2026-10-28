@@ -3,10 +3,8 @@ import { PROJECTS } from "@/lib/constants";
 
 export default function RelatedProject({
   projectId,
-  showSource = false,
 }: {
-  projectId?: string;
-  showSource?: boolean;
+  projectId: string;
 }) {
   const project = PROJECTS.find((entry) => entry.id === projectId);
   if (!project) return null;
@@ -23,19 +21,15 @@ export default function RelatedProject({
       >
         {project.name}
       </Link>
-      {showSource ? (
-        <>
-          <span aria-hidden="true">·</span>
-          <a
-            href={project.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="related-link"
-          >
-            GitHub
-          </a>
-        </>
-      ) : null}
+      <span aria-hidden="true">·</span>
+      <a
+        href={project.url}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="related-link"
+      >
+        GitHub
+      </a>
     </nav>
   );
 }

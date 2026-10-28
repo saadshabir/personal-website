@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "type-check": "tsc --noEmit",
+    "test:demo": "node --experimental-strip-types --test tests/network-demo.test.mjs",
     "perf:assets": "node scripts/measure-page-assets.mjs"
   },
   "dependencies": {

@@ -1,5 +1,6 @@
 import NetworkPlayground from "@/components/NetworkPlayground";
 import { getPageMetadata } from "@/lib/seo";
+import "./home.css";
 
 export const metadata = getPageMetadata("home");
 
