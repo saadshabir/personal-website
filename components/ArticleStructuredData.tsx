@@ -11,6 +11,7 @@ export default function ArticleStructuredData({ slug }: { slug: string }) {
     headline: article.title,
     description: article.description,
     datePublished: article.publishedAt,
+    ...(article.updatedAt && { dateModified: article.updatedAt }),
     image: getShareImage(slug, article.title).url,
     url,
     mainEntityOfPage: { "@type": "WebPage", "@id": url },

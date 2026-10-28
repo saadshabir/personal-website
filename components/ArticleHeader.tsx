@@ -12,7 +12,12 @@ export default function ArticleHeader({ slug, title }: { slug: string; title?: s
         <Link href="/writing">All writing</Link>
       </nav>
       <h1>{title ?? article.title}</h1>
-      <time dateTime={article.publishedAt}>{formatWritingDate(article.publishedAt, "long")}</time>
+      <p className="article-dates">
+        <time dateTime={article.publishedAt}>{formatWritingDate(article.publishedAt, "long")}</time>
+        {article.updatedAt && (
+          <span>Updated <time dateTime={article.updatedAt}>{formatWritingDate(article.updatedAt, "long")}</time></span>
+        )}
+      </p>
       {article.projectId && (
         <div className="article-actions">
           <RelatedProject projectId={article.projectId} />

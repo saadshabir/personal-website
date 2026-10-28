@@ -39,6 +39,7 @@ type WritingEntry = {
   title: string;
   description: string;
   publishedAt: string;
+  updatedAt?: string;
   url: string;
   projectId?: string;
 };
@@ -135,8 +136,9 @@ export const WRITING: readonly WritingEntry[] = [
     id: "004",
     title: "ZTAP: Native Policy, Persistent Enforcement",
     description:
-      "How ZTAP turns native Kubernetes NetworkPolicy into per-container eBPF enforcement, commits policy snapshots, and preserves them through agent restarts.",
+      "How ZTAP enforces native Kubernetes NetworkPolicy with eBPF, preserves policy through agent restarts, and reduces reconciliation overhead and build size.",
     publishedAt: "2026-10-26",
+    updatedAt: "2026-10-28",
     url: "/writing/ztap-native-policy-persistent-enforcement",
     projectId: "001",
   },

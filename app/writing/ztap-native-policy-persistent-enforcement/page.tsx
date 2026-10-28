@@ -4,10 +4,11 @@ import ArticleStructuredData from "@/components/ArticleStructuredData";
 import { getArticleMetadata } from "@/lib/seo";
 
 const slug = "ztap-native-policy-persistent-enforcement";
-const revision = "3657d9fa485c0d510734cf0f52d6b85f75cebce2";
+const revision = "ce4ecfe1c0e9aeca176b39aa1a10af590f447008";
 const repository = "https://github.com/saadshabir/ZTAP";
 const source = `${repository}/blob/${revision}`;
 const evidence = `${repository}/tree/${revision}/docs/evidence/restart-continuity-2026-10-09`;
+const reconciliationEvidence = `${source}/docs/evidence/reconciliation-2026-10-10`;
 
 export const metadata = getArticleMetadata(slug);
 
@@ -39,13 +40,14 @@ export default function NativePolicyPersistentEnforcementPage() {
             makes new containers wait for classification.
           </p>
           <p>
-            this article brings the policy model and restart work together. i
-            checked the implementation against the latest published main on
-            October 26, 2026, at{" "}
+            this article brings the policy model, restart work, and recent
+            reconciliation changes together. i checked the implementation against
+            the latest published main on October 28, 2026, at{" "}
             <a href={`${repository}/commit/${revision}`} className="article-link">
-              commit 3657d9f
+              commit ce4ecfe
             </a>
-            . the measurements below keep their original dates and scope.
+            , merged on October 27. the measurements below keep their original
+            dates and scope.
           </p>
 
           <h2>one binary, two DaemonSets</h2>
@@ -67,7 +69,9 @@ ztap version   # print build metadata`}</code></pre>
             cgroup access to the API endpoints it needs before classification.
           </p>
           <p>
-            eBPF objects are compiled ahead of time and embedded in the binary.
+            source builds now require Go 1.26.10 or a compatible newer toolchain
+            with current security patches. eBPF objects are compiled ahead of
+            time and embedded in the binary.
             enforcement needs Linux, cgroup v2, bpffs, and the supported containerd
             systemd-cgroup layout. on macOS i can validate policy files and run
             portable tests; those checks cannot establish what a kernel hook does.
@@ -106,11 +110,11 @@ spec:
             can match.
           </p>
           <p>
-            the agent watches Pods, Namespaces, Nodes, and NetworkPolicies. it
-            resolves peer selectors into IPv4 Pod addresses across the cluster,
-            then attaches ingress and egress programs to selected container cgroups
-            on its own node. multiple containers in a Pod mean multiple cgroups
-            to account for.
+            the agent watches Pods, Namespaces, and NetworkPolicies across the
+            cluster, plus its own Node object. it resolves peer selectors into
+            IPv4 Pod addresses across the cluster, then attaches ingress and
+            egress programs to selected container cgroups on its own node.
+            multiple containers in a Pod mean multiple cgroups to account for.
           </p>
           <pre className="code-block"><code>{`NetworkPolicy + cluster objects
               ↓
@@ -199,6 +203,40 @@ commit the snapshot for the eBPF ingress / egress hooks`}</code></pre>
             new Pod reusing the IP.
           </p>
 
+          <h2>do less work before publishing</h2>
+          <p>
+            an unchanged snapshot already avoided a kernel update, but getting
+            to that decision still took work. the latest changes start earlier:
+            informer updates compare the facts used by policy resolution,
+            workload identity, and packet-socket checks. a Pod readiness change
+            or resource-version bump alone no longer queues reconciliation.
+            labels, IPs, container identities, running transitions, and relevant
+            security settings still do. additions and deletions also trigger it.
+            the{" "}
+            <a href={`${source}/internal/cli/native_updates_linux.go`} className="article-link">
+              update comparisons
+            </a>{" "}
+            make those choices explicit.
+          </p>
+          <p>
+            snapshot construction now reads immutable informer objects directly
+            and copies the facts the compiler needs, instead of cloning whole
+            Pods, Namespaces, and the Node. workload identities are indexed by
+            cgroup ID in a map owned by the candidate snapshot. lookup no longer
+            scans the entire cgroup cache; filesystem identity checks remain,
+            and conflicting identities reject publication. a relevant update
+            still builds a complete candidate before engine apply.
+          </p>
+          <p>
+            the binary also constructs only the core and networking Kubernetes
+            clients it uses, with four explicit shared informers. client-go
+            still handles authentication, transport, watch recovery, relists,
+            and cache synchronization. Pod and Namespace watches stay
+            cluster-wide for peer resolution; the Node watch is filtered to the
+            local node. this removes broad production clientset and informer
+            factory imports, although the module graph remains unchanged.
+          </p>
+
           <h2>keep enforcement through an agent outage</h2>
           <p>
             an atomic policy update still needs enforcement to outlive the process
@@ -281,6 +319,73 @@ commit the snapshot for the eBPF ingress / egress hooks`}</code></pre>
           <pre className="code-block"><code>{`go run ./tools/phase5verify \\
   -restart-dir=docs/evidence/restart-continuity-2026-10-09`}</code></pre>
 
+          <h2>what the reconciliation changes measured</h2>
+          <p>
+            the latest merge includes an{" "}
+            <a href={`${reconciliationEvidence}/README.md`} className="article-link">
+              October 10 local comparison
+            </a>{" "}
+            against commit <code className="inline-code">3657d9f</code>. its
+            candidate is captured as a runtime patch and added-source archive.
+            both sides used Go 1.26.9 on the same arm64 Linux kernel as the
+            restart tests, with GOMAXPROCS=2 and CPU affinity 0,1. builds and
+            benchmarks ran sequentially. these measurements predate the current
+            Go 1.26.10 build requirement.
+          </p>
+          <div className="table-scroll">
+            <table className="measurement-table">
+              <caption>October 10, 2026: local before-and-after comparison</caption>
+              <thead>
+                <tr>
+                  <th scope="col">measurement</th>
+                  <th scope="col">before</th>
+                  <th scope="col">after</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">stripped Linux binary</th><td className="measurement-value">54.63 MiB</td><td className="measurement-value">38.31 MiB</td></tr>
+                <tr><th scope="row">cold build median</th><td className="measurement-value">39.81 s</td><td className="measurement-value">24.69 s</td></tr>
+                <tr><th scope="row">binary dependency packages</th><td>776</td><td>553</td></tr>
+                <tr><th scope="row">unchanged snapshot / compile median</th><td className="measurement-value">1.915 ms</td><td className="measurement-value">1.624 ms</td></tr>
+                <tr><th scope="row">allocated bytes per unchanged snapshot</th><td className="measurement-value">1,874,406 B</td><td className="measurement-value">1,203,984 B</td></tr>
+                <tr><th scope="row">allocations per unchanged snapshot</th><td>10,913</td><td>7,908</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p>
+            the stripped binary was 29.9% smaller, and the median of three cold
+            builds fell by 38.0%. unchanged snapshots used 35.8% fewer allocated
+            bytes. the snapshot results are medians of five 500-ms benchmark
+            runs with 250 local Pods, 25 policies, and 2,500 compiled rules.
+            they include cache reads, filesystem identity checks, and compilation
+            with a no-op engine; kernel map writes, API delivery, and debounce
+            are excluded. changing policies, Pod IP churn, and selector-heavy
+            fixtures are recorded in the same bundle.
+          </p>
+          <p>
+            the real-engine comparison was more modest: reconciliation p95 went
+            from 89.714 to 87.579 ms, while event-to-active-epoch p95 increased
+            from 104.506 to 105.762 ms. each reported p95 is the maximum of just
+            three samples using a fake Kubernetes client and real containerd
+            cgroups. that does not establish a material kernel or event-latency
+            improvement. maximum quiet helper RSS fell from 55.508 to 52.805 MiB;
+            this excludes kernel maps and is not the deployed agent’s cgroup
+            memory. the{" "}
+            <a href={`${reconciliationEvidence}/summary.json`} className="article-link">
+              raw summary
+            </a>{" "}
+            retains the samples and provenance.
+          </p>
+          <p>
+            this change leaves the compiler, packet encoding, map-write path,
+            and generated eBPF bindings alone. it also extracts shared CI scripts,
+            removes duplicate checks, and splits the evidence verifier into
+            focused files. the retained validation covers portable and Linux
+            tests, privileged integration, and kind lifecycle checks. hosted CI
+            duration was not measured, and this local comparison does not
+            replace the full hosted performance evidence.
+          </p>
+
           <h2>keep historical performance in context</h2>
           <p>
             the September 24 reference run used commit{" "}
@@ -293,8 +398,9 @@ commit the snapshot for the eBPF ingress / egress hooks`}</code></pre>
           </p>
           <p>
             the 1,652 ms rollout gap belongs to that older process-owned design.
-            the restart bundle did not rerun the full hosted performance fixture,
-            so those latency, throughput, and resource numbers remain historical.
+            neither the restart bundle nor the local reconciliation comparison
+            reran the full hosted performance fixture, so the September latency,
+            throughput, and resource numbers remain historical.
             the{" "}
             <a href={`${source}/docs/performance.md`} className="article-link">
               performance guide

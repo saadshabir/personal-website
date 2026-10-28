@@ -56,7 +56,7 @@ export function getShareImage(slug: string, title: string) {
   };
 }
 
-function createMetadata(page: SeoPage, slug: string, publishedAt?: string): Metadata {
+function createMetadata(page: SeoPage, slug: string, publishedAt?: string, updatedAt?: string): Metadata {
   const title =
     page.path === "/"
       ? `${SITE_CONFIG.name} | ${page.title}`
@@ -79,6 +79,7 @@ function createMetadata(page: SeoPage, slug: string, publishedAt?: string): Meta
         ? {
             type: "article",
             publishedTime: publishedAt,
+            ...(updatedAt && { modifiedTime: updatedAt }),
             authors: [SITE_CONFIG.url],
           }
         : { type: "website" }),
@@ -113,6 +114,7 @@ export function getArticleMetadata(slug: string): Metadata {
     },
     slug,
     article.publishedAt,
+    article.updatedAt,
   );
 }
 

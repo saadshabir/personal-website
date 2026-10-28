@@ -169,7 +169,7 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outlin
 .article-breadcrumb a { text-decoration: none; }
 .article-breadcrumb a:hover { color: var(--foreground); }
 .article-header h1 { font-weight: 300; font-size: clamp(32px, 4.6vw, 60px); line-height: 1; letter-spacing: -.035em; }
-.article-header time { display: block; color: var(--muted-foreground); margin-top: 24px; font-size: 18px; }
+.article-dates { display: flex; flex-wrap: wrap; gap: 8px 20px; color: var(--muted-foreground); margin-top: 24px; font-size: 18px; }
 .article-actions { margin-top: 16px; }
 .article-actions nav { font-size: 15px; }
 .article-prose { max-width: 68ch; margin-top: 56px; overflow-wrap: anywhere; font-size: 17px; line-height: 1.6; }
@@ -192,7 +192,7 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outlin
 .measurement-table th, .measurement-table td { padding-block: 12px; }
 .measurement-table th { font-weight: 500; }
 .measurement-table tbody th { font-weight: 400; }
-.measurement-table th:first-child { padding-right: 16px; }
+.measurement-table th:not(:last-child), .measurement-table td:not(:last-child) { padding-right: 16px; }
 .measurement-value { white-space: nowrap; }
 .dark .project-mark { background: #222225; }
 .dark .mark-ztap { color: #9cb7a8; }
