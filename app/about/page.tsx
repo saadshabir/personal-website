@@ -1,14 +1,35 @@
 import Image from "next/image";
 import Link from "next/link";
 import EmailButton from "@/components/EmailButton";
+import JsonLd from "@/components/JsonLd";
 import { SITE_CONFIG } from "@/lib/constants";
-import { getPageMetadata } from "@/lib/seo";
+import { AUTHOR, getCanonicalUrl, getPageMetadata, SEO_PAGES } from "@/lib/seo";
 
 export const metadata = getPageMetadata("about");
+
+const profile = {
+  "@type": "ProfilePage",
+  url: AUTHOR.url,
+  name: `About ${SITE_CONFIG.name}`,
+  inLanguage: SITE_CONFIG.language,
+  mainEntity: {
+    ...AUTHOR,
+    alternateName: SITE_CONFIG.alternateName,
+    description: SEO_PAGES.about.description,
+    image: getCanonicalUrl(SITE_CONFIG.portrait),
+    sameAs: [SITE_CONFIG.github, SITE_CONFIG.linkedin],
+    affiliation: {
+      "@type": "CollegeOrUniversity",
+      name: SITE_CONFIG.school,
+      url: SITE_CONFIG.schoolUrl,
+    },
+  },
+};
 
 export default function AboutPage() {
   return (
     <div className="content-page">
+      <JsonLd data={profile} />
       <header className="page-intro"><h1>About</h1></header>
       <div className="about-grid">
         <div className="about-copy">
@@ -20,7 +41,7 @@ export default function AboutPage() {
         <aside className="about-profile" aria-label="Photo and contact links">
           <Image
             className="about-portrait"
-            src="/images/muhammad-saad-shabir.jpg"
+            src={SITE_CONFIG.portrait}
             alt="Muhammad Saad Shabir standing beside a mountain lake"
             width={768}
             height={1024}

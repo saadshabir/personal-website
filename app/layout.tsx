@@ -7,7 +7,6 @@ import { ThemeProvider } from "next-themes";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import { SITE_CONFIG } from "@/lib/constants";
-import { getPageMetadata } from "@/lib/seo";
 import "./globals.css";
 
 const geist = Geist({
@@ -25,48 +24,8 @@ const urdu = localFont({
   adjustFontFallback: "Times New Roman",
 });
 
-const structuredData = {
-  "@context": "https://schema.org",
-  "@type": "Person",
-  "@id": `${SITE_CONFIG.url}/#person`,
-  name: SITE_CONFIG.name,
-  alternateName: "Saad Shabir",
-  jobTitle: SITE_CONFIG.jobTitle,
-  description: SITE_CONFIG.description,
-  url: SITE_CONFIG.url,
-  sameAs: [SITE_CONFIG.github, SITE_CONFIG.linkedin],
-  affiliation: {
-    "@type": "CollegeOrUniversity",
-    name: SITE_CONFIG.school,
-    url: SITE_CONFIG.schoolUrl,
-  },
-  knowsAbout: [
-    "Network Engineering",
-    "Systems Programming",
-    "Kubernetes NetworkPolicy",
-    "eBPF",
-    "Packet Analysis",
-    "Routing Simulation",
-  ],
-};
-
 export const metadata: Metadata = {
-  ...getPageMetadata("home"),
   metadataBase: new URL(SITE_CONFIG.url),
-  keywords: [
-    SITE_CONFIG.name,
-    "Saad Shabir",
-    "network engineering",
-    "systems programming",
-    "Kubernetes network policy",
-    "eBPF",
-    "Rust packet analysis",
-    "C++ routing simulation",
-    "ZTAP",
-    "NetScope",
-    "RouteProof",
-    SITE_CONFIG.school,
-  ],
   authors: [{ name: SITE_CONFIG.name }],
   creator: SITE_CONFIG.name,
   publisher: SITE_CONFIG.name,
@@ -76,17 +35,6 @@ export const metadata: Metadata = {
     telephone: false,
   },
   manifest: "/manifest.json",
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      "max-video-preview": -1,
-      "max-image-preview": "large",
-      "max-snippet": -1,
-    },
-  },
 };
 
 export const viewport: Viewport = {
@@ -123,12 +71,6 @@ export default function RootLayout({
           <SpeedInsights />
           <Analytics />
         </ThemeProvider>
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify(structuredData).replace(/</g, "\\u003c"),
-          }}
-        />
       </body>
     </html>
   );

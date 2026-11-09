@@ -47,9 +47,22 @@ export const SEO_PAGES = {
 
 export const SHARE_IMAGE_SIZE = { width: 1200, height: 630 } as const;
 
+export function getCanonicalUrl(path: string) {
+  return new URL(path, SITE_CONFIG.url).href;
+}
+
+const authorUrl = getCanonicalUrl(SEO_PAGES.about.path);
+
+export const AUTHOR = {
+  "@type": "Person",
+  "@id": `${authorUrl}#person`,
+  name: SITE_CONFIG.name,
+  url: authorUrl,
+} as const;
+
 export function getShareImage(slug: string, title: string) {
   return {
-    url: new URL(`/og/${slug}`, SITE_CONFIG.url).toString(),
+    url: getCanonicalUrl(`/og/${slug}`),
     ...SHARE_IMAGE_SIZE,
     type: "image/png",
     alt: `${title} — ${SITE_CONFIG.name}`,
@@ -61,26 +74,27 @@ function createMetadata(page: SeoPage, slug: string, publishedAt?: string, updat
     page.path === "/"
       ? `${SITE_CONFIG.name} | ${page.title}`
       : `${page.title} | ${SITE_CONFIG.name}`;
-  const url = new URL(page.path, SITE_CONFIG.url).toString();
+  const url = getCanonicalUrl(page.path);
   const image = getShareImage(slug, page.title);
 
   return {
     title: { absolute: title },
     description: page.description,
     alternates: { canonical: url },
+    robots: { "max-image-preview": "large" },
     openGraph: {
       title,
       description: page.description,
       url,
       siteName: SITE_CONFIG.name,
-      locale: "en_CA",
+      locale: SITE_CONFIG.language.replace("-", "_"),
       images: [image],
       ...(publishedAt
         ? {
             type: "article",
             publishedTime: publishedAt,
             ...(updatedAt && { modifiedTime: updatedAt }),
-            authors: [SITE_CONFIG.url],
+            authors: [AUTHOR.url],
           }
         : { type: "website" }),
     },

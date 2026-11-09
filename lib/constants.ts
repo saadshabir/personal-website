@@ -1,14 +1,16 @@
 export const SITE_CONFIG = {
   name: "Muhammad Saad Shabir",
+  alternateName: "Saad Shabir",
   url: "https://saadshabir.vercel.app",
+  language: "en-CA",
   email: "saad.shabir@hotmail.com",
   github: "https://github.com/saadshabir",
   linkedin: "https://www.linkedin.com/in/saadshabir/",
   resume: "/MuhammadSaad-Shabir_Resume.pdf",
+  portrait: "/images/muhammad-saad-shabir.jpg",
   location: "Ottawa, Canada",
   description:
-    "Muhammad Saad Shabir, a Network Technology student at Carleton University, building tools for network security, routing simulation, and packet analysis.",
-  jobTitle: "Network Technician & Software Developer",
+    "Explore Muhammad Saad Shabir’s portfolio of Kubernetes network policy, routing simulation, and packet analysis projects. Based in Ottawa, Canada.",
   school: "Carleton University",
   schoolUrl: "https://carleton.ca/",
 } as const;
