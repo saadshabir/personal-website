@@ -22,8 +22,6 @@ const nextConfig = {
   turbopack: {
     root: process.cwd(),
   },
-  // Compression
-  compress: true,
   // Power optimizations
   poweredByHeader: false,
 };

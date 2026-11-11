@@ -1,8 +1,9 @@
 import Link from "next/link";
 import ProjectMark from "@/components/ProjectMark";
+import type { ProjectName } from "@/lib/constants";
 
 interface ProjectCardProps {
-  name: string;
+  name: ProjectName;
   anchor: string;
   title: string;
   tags: readonly string[];

@@ -6,7 +6,7 @@ import { resolve } from "node:path";
 // excluding legacy-only scripts. Gzip sizes are estimates, not browser timings.
 const route = process.argv[2] ?? "/";
 const page = route.replace(/^\/+|\/+$/g, "") || "index";
-if (!/^[a-z0-9/-]+$/i.test(page) || page.split("/").includes("..")) {
+if (!/^[a-z0-9/-]+$/i.test(page)) {
   throw new Error("Pass a prerendered route, for example /about or /writing/add-commutative.");
 }
 

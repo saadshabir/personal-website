@@ -106,7 +106,7 @@ export default function NetworkPlayground({ children }: { children: ReactNode })
               const labelX = compact ? endpoint ? 36 : node.id === "router-a" ? -26 : 26 : 0;
               const labelAnchor = compact ? node.id === "router-a" ? "end" : "start" : "middle";
               return <g key={node.id} transform={`translate(${point.x} ${point.y})`}
-                className={`network-node${endpoint ? " endpoint" : ""}${active ? " is-active" : ""}${blocked ? " is-blocked" : ""}`} aria-hidden="true">
+                className={`network-node${active ? " is-active" : ""}${blocked ? " is-blocked" : ""}`} aria-hidden="true">
                 <circle className="node-halo" r="28" />
                 {blocked && <circle className="policy-ring" r="27" />}
                 <circle className="node-body" r={endpoint ? 21 : 18} />

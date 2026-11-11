@@ -51,11 +51,10 @@ type Experience = {
   company: string;
   dates: string;
   description: readonly string[];
-  link: string;
 };
 
 // Projects data
-export const PROJECTS: readonly Project[] = [
+export const PROJECTS = [
   {
     id: "001",
     name: "ZTAP",
@@ -131,7 +130,9 @@ export const PROJECTS: readonly Project[] = [
       "Self-hosted AI chatbot for the terminal that answers questions about your documents using Ollama, LangChain, and ChromaDB, with source citations.",
     tags: ["local-llm", "rag", "ollama"],
   },
-] as const;
+] as const satisfies readonly Project[];
+
+export type ProjectName = (typeof PROJECTS)[number]["name"];
 
 export const WRITING: readonly WritingEntry[] = [
   {
@@ -172,6 +173,5 @@ export const EXPERIENCE: readonly Experience[] = [
     description: [
       "Configured and supported Cisco network infrastructure, maintained 99.9% uptime, and used Python to cut setup time by 30%.",
     ],
-    link: "#",
   },
 ] as const;

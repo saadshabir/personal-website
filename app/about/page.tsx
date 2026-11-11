@@ -38,7 +38,7 @@ export default function AboutPage() {
           <p>That takes a few forms: enforcing Kubernetes network policies with <Link className="text-link" href="/projects#ztap">ZTAP</Link>, simulating routing and failures with <Link className="text-link" href="/projects#routeproof">RouteProof</Link>, and analyzing packets and flows with <Link className="text-link" href="/projects#netscope">NetScope</Link>.</p>
           <p>I&apos;m interested in applying those skills to the infrastructure behind payments, trading, and financial markets.</p>
         </div>
-        <aside className="about-profile" aria-label="Photo and contact links">
+        <aside aria-label="Photo and contact links">
           <Image
             className="about-portrait"
             src={SITE_CONFIG.portrait}

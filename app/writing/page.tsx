@@ -11,7 +11,7 @@ export default function WritingPage() {
       <header className="page-intro">
         <h1>Writing</h1>
       </header>
-      <div className="writing-list">
+      <div>
         {WRITING.map((item) => (
           <Link key={item.id} href={item.url} className="writing-row">
             <time dateTime={item.publishedAt}>{formatWritingDate(item.publishedAt)}</time>

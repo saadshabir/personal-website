@@ -50,7 +50,8 @@ const NetworkPackets = memo(function NetworkPackets({ model, paint, compact, red
           element.setAttribute("data-packet-id", String(packet.id));
           slot.id = packet.id;
         }
-        const className = `network-packet is-${packet.status}${packet.id === state.selectedPacketId ? " is-selected" : ""}`;
+        const statusClass = packet.status === "blocked" || packet.status === "dropped" ? ` is-${packet.status}` : "";
+        const className = `network-packet${statusClass}${packet.id === state.selectedPacketId ? " is-selected" : ""}`;
         if (slot.className !== className) {
           element.setAttribute("class", className);
           slot.className = className;
@@ -63,7 +64,7 @@ const NetworkPackets = memo(function NetworkPackets({ model, paint, compact, red
   }, [compact, reducedMotion, model, paint]);
 
   return (
-    <g className="network-packets" aria-hidden="true">
+    <g aria-hidden="true">
       {Array.from({ length: POOL_SIZE }, (_, index) => (
         <g key={index} ref={(element) => { slots.current[index] = element; }}
           className="network-packet" style={{ visibility: "hidden" }}

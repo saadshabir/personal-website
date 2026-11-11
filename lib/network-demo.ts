@@ -1,9 +1,9 @@
 // Browser-local illustration. Timings control animation, not network benchmarks.
-export type RouteId = "a" | "b";
-export type NodeId = "source" | "router-a" | "router-b" | "destination";
-export type Point = { x: number; y: number };
-export type PacketStatus = "in-flight" | "delivered" | "blocked" | "dropped";
-export type DemoPacket = {
+type RouteId = "a" | "b";
+type NodeId = "source" | "router-a" | "router-b" | "destination";
+type Point = { x: number; y: number };
+type PacketStatus = "in-flight" | "delivered" | "blocked" | "dropped";
+type DemoPacket = {
   id: number;
   route: RouteId;
   progress: number;
@@ -30,7 +30,7 @@ export type LabAction =
   | { type: "select-packet"; id: number | "latest" | null }
   | { type: "reset" };
 
-export const PACKET_INTERVAL = 1300;
+const PACKET_INTERVAL = 1300;
 export const JOURNEY_MS = 3200;
 export const FADE_MS = 650;
 export const HISTORY_SIZE = 4;

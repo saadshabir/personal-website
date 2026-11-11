@@ -19,7 +19,7 @@ export default function ProjectsPage() {
             <h2 className="section-label">{category.title}</h2>
             <div>
               {projects.map((item) => (
-                <ProjectCard key={item.id} name={item.name} anchor={item.name.toLowerCase()} title={item.displayTitle ?? item.name}
+                <ProjectCard key={item.id} name={item.name} anchor={item.name.toLowerCase()} title={"displayTitle" in item ? item.displayTitle : item.name}
                   tags={item.tags} description={item.description} link={item.url}
                   writing={WRITING.filter((entry) => entry.projectId === item.id)} />
               ))}
