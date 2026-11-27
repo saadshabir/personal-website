@@ -62,7 +62,7 @@ export const PROJECTS = [
     category: "active",
     url: "https://github.com/saadshabir/ZTAP",
     description:
-      "Experimental Linux node agent for Kubernetes NetworkPolicy enforcement using per-container eBPF, with offline policy validation and live flow telemetry.",
+      "Experimental Linux node agent that uses per-container eBPF to enforce Kubernetes NetworkPolicy rules for IPv4 TCP and UDP traffic. Exports allow and deny decisions through OpenTelemetry.",
     tags: ["ebpf", "kubernetes", "network-policy"],
   },
   {
